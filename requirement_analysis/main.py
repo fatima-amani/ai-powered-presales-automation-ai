@@ -3,6 +3,8 @@ from together import Together
 import os
 import json
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
+import requests
+from requirement_analysis.extract_from_doc import extract_text_from_doc, extract_text_from_pdf
 
 # Load API key from .env file
 load_dotenv()
@@ -11,7 +13,55 @@ api_key = os.getenv("TOGETHER_API_KEY")
 # Initialize Together client
 client = Together(api_key=api_key)
 
-def extract_requirements(text):
+# Function to process requirement text and document
+def extract_requirements(requirement_text: str, url: str):
+    """Extract requirements from a given requirement text and a Cloudinary PDF/DOCX URL."""
+
+    # Determine the file type from the URL
+    if url.endswith(".pdf"):
+        file_type = "pdf"
+    elif url.endswith(".docx"):
+        file_type = "docx"
+    else:
+        raise ValueError("Unsupported file format. Only PDF and DOCX are supported.")
+
+    # Download the file from Cloudinary
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an error for failed request
+    except requests.exceptions.RequestException as e:
+        print(f"Error downloading file: {e}")
+        return None
+
+    # Save the downloaded file temporarily
+    file_path = f"temp.{file_type}"
+    with open(file_path, "wb") as f:
+        f.write(response.content)
+
+    # Extract text based on file type
+    extracted_text = None
+    if file_type == "pdf":
+        extracted_text = extract_text_from_pdf(file_path)
+    elif file_type == "docx":
+        extracted_text = extract_text_from_doc(file_path)
+
+    if not extracted_text:
+        return {"error": "Failed to extract text from the document"}
+
+    # Append requirement_text to extracted document text
+    combined_text = requirement_text + "\n\n" + extracted_text
+
+    # Send the text to the LLM function
+    processed_requirements = extract_requirements_llm(combined_text)
+
+    return processed_requirements
+
+
+
+def extract_requirements_llm(text):
+    """Extract functional and non-functional requirements from software requirements text."""
+
+
     prompt = f"""
         Extract the following from the given software requirements document:
         1. **Functional Requirements**: Clearly list all functional aspects.
@@ -53,10 +103,3 @@ def extract_requirements(text):
     
     return json.dumps(parsed_output,indent=4)
 
-# Manually enter text
-manual_text = "Enter software requirements text: Universities need a way to manage courses, students, and faculty better. The system should make things easy for students and teachers. Students should be able to sign up for courses without hassle. Teachers need to upload lectures, assignments, and quizzes. Students also need a way to turn in their assignments online, and grades should be handled smoothly. Notifications for deadlines should be automatic. There should also be a forum where students and instructors can discuss coursework."
-
-# Extract and print results
-result = extract_requirements(manual_text)
-print("\nExtracted Requirements:")
-print(result)
