@@ -15,16 +15,10 @@ app.add_middleware(
 )
 
 
-# Define request model
-class QueryRequest(BaseModel):
-    input: str
-
-
 # Define response endpoint
 @app.get("/")
-async def get_response(query: QueryRequest):
-    response = agent_app.invoke({"input": query.input})
-    return {"output": response["output"]}
+async def get_response():
+    return "hello world"
 
 # Run the FastAPI app (only if executed directly)
 if __name__ == "__main__":
