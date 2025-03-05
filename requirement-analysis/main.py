@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from together import Together
 import os
 import json
+from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 
 # Load API key from .env file
 load_dotenv()
@@ -33,12 +34,29 @@ def extract_requirements(text):
         repetition_penalty=1,
         stop=["</s>"],
     )
-
-    return response.choices[0].message.content  # Extract text from response
+    
+    raw_output = response.choices[0].message.content  # Extract text from response
+    
+    # Define response schema
+    response_schemas = [
+        ResponseSchema(name="functional_requirements", description="List of functional requirements"),
+        ResponseSchema(name="non_functional_requirements", description="List of non-functional requirements"),
+        ResponseSchema(name="feature_breakdown", description="Breakdown of features into components")
+    ]
+    
+    parser = StructuredOutputParser.from_response_schemas(response_schemas)
+    try:
+        parsed_output = parser.parse(raw_output)
+    except Exception as e:
+        print(f"Error: {e}. Returning raw output.")
+        return raw_output
+    
+    return json.dumps(parsed_output,indent=4)
 
 # Manually enter text
-manual_text = input("Enter software requirements text: ")
+manual_text = "Enter software requirements text: Universities need a way to manage courses, students, and faculty better. The system should make things easy for students and teachers. Students should be able to sign up for courses without hassle. Teachers need to upload lectures, assignments, and quizzes. Students also need a way to turn in their assignments online, and grades should be handled smoothly. Notifications for deadlines should be automatic. There should also be a forum where students and instructors can discuss coursework."
 
 # Extract and print results
 result = extract_requirements(manual_text)
-print("\nExtracted Requirements:\n", result)
+print("\nExtracted Requirements:")
+print(result)
