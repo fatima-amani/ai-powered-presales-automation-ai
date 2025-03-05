@@ -1,3 +1,5 @@
 myenv/
 
 .env
+
+requirements_env/

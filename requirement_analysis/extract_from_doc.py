@@ -24,8 +24,8 @@ def extract_text_from_doc(doc_path):
         return None
 
 # Example usage:
-# pdf_text = extract_text_from_pdf("C:/Users/Fatima/Downloads/RFP_Football_Club_Website_and_App.pdf")
-doc_text = extract_text_from_doc("C:/Users/Fatima/Downloads/RFP_Football_Club_Website_and_App.docx")
+pdf_text = extract_text_from_pdf("C:/Users/aitha/Downloads/RFP Football Club Website and App.pdf")
+# doc_text = extract_text_from_doc("C:/Users/aitha/Downloads/RFP Football Club Website and App.pdf")
 
-# print("Extracted PDF Text:\n", pdf_text)
-print("\nExtracted DOCX Text:\n", doc_text)
+print("Extracted PDF Text:\n", pdf_text)
+# print("\nExtracted DOCX Text:\n", doc_text)
