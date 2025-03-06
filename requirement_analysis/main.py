@@ -4,7 +4,7 @@ import os
 import json
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 import requests
-from requirement_analysis.extract_from_doc import extract_text_from_doc, extract_text_from_pdf
+from extract_from_doc import extract_text_from_doc, extract_text_from_pdf
 
 # Load API key from .env file
 load_dotenv()
@@ -56,28 +56,48 @@ def extract_requirements(requirement_text: str, url: str):
 
     return processed_requirements
 
-
-
 def extract_requirements_llm(text):
     """Extract functional and non-functional requirements from software requirements text."""
 
-
     prompt = f"""
         Extract the following from the given software requirements document:
+        
         1. **Functional Requirements**: Clearly list all functional aspects.
         2. **Non-Functional Requirements**: List performance, security, and other system constraints.
-        3. **Feature Breakdown**: Break down features into components.
+        3. **Feature Breakdown**: Break down features into components and descriptions.
+
+        Ensure the output strictly follows this JSON format:
+
+        {{
+            "functional_requirements": [
+                "Requirement 1",
+                "Requirement 2",
+                ...
+            ],
+            "non_functional_requirements": [
+                "Requirement 1",
+                "Requirement 2",
+                ...
+            ],
+            "feature_breakdown": [
+                {{
+                    "component": "Component Name",
+                    "description": "Component Description"
+                }},
+                ...
+            ]
+        }}
 
         Input Text:
         {text}
 
-        Provide the output in JSON format with keys: "functional_requirements", "non_functional_requirements", and "feature_breakdown".
+        Provide the output in valid JSON format only, without any additional text.
         """
 
     response = client.chat.completions.create(
         model="mistralai/Mistral-7B-Instruct-v0.3",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=1024,  # Adjust token limit
+        max_tokens=2000,  # Adjust token limit
         temperature=0.77,
         top_p=0.7,
         top_k=50,
@@ -100,6 +120,14 @@ def extract_requirements_llm(text):
     except Exception as e:
         print(f"Error: {e}. Returning raw output.")
         return raw_output
-    
+
     return json.dumps(parsed_output,indent=4)
 
+
+if __name__ == "__main__":
+    requirement_text = "Specify the key requirements for the system."
+    url = "https://res.cloudinary.com/depfpw7ym/image/upload/v1741238110/pre_sales_automation_dev/cq9n8dxpeeezvzljbtte.pdf"  # Replace with a valid Cloudinary URL
+    
+    processed_requirements = extract_requirements(requirement_text, url)
+    
+    print(processed_requirements)  # Ensure the output is printed
