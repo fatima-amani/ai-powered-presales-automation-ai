@@ -4,6 +4,8 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from requirement_analysis.main import extract_requirements
+from architecture_and_tech_stack.main import get_tech_stack_recommendation
+from typing import List, Dict
 
 
 app = FastAPI()
@@ -17,27 +19,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Define response endpoint
-@app.get("/")
-async def get_response():
-    return "hello world"
-
-# API: Process Extracted Text for Requirements
-@app.post("/process")
-async def process_text(text: str = Form(...)):
-    if not text:
-        return JSONResponse(content={"error": "No text provided"}, status_code=400)
-
-    result = extract_requirements(text)
-    return JSONResponse(content=result, status_code=200)
-
-
-app = FastAPI()
-
 # Define the request body model
 class ExtractRequest(BaseModel):
     requirement_text: str
     url: str
+
+# Define the request body model
+class Requirements(BaseModel):
+    functionalRequirement: List[str]  # Array of strings for functional requirements
+    nonFunctionalRequirement: List[str]  # Array of strings for non-functional requirements
+    featureBreakdown: Dict[str, str]  # Mixed type for feature breakdown (key-value pairs)
+
+
+app = FastAPI()
+
+# Define response endpoint
+@app.get("/")
+async def get_response():
+    return "hello world"
 
 @app.post("/extract")
 async def extract(req: ExtractRequest):
@@ -46,6 +45,21 @@ async def extract(req: ExtractRequest):
         return {"message": "Extraction successful", "data": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/tech-stack-recommendation")
+async def tech_stack_recommendation(requirements: Requirements):
+    """
+    Accepts requirements in the request body, validates them, and returns a tech stack recommendation.
+    """
+    if not requirements:
+        raise HTTPException(status_code=400, detail="Requirements are missing in the request body.")
+
+    try:
+        # Convert Pydantic model to a dictionary
+        response = get_tech_stack_recommendation(requirements.dict())
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
 # Run the FastAPI app (only if executed directly)
