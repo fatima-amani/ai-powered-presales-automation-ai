@@ -3,6 +3,7 @@ import json
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 from dotenv import load_dotenv
 from together import Together
+import networkx as nx
 
 # Load API key from .env file
 load_dotenv()
@@ -58,7 +59,7 @@ def get_tech_stack_recommendation(requirements_json):
     response = client.chat.completions.create(
         model="mistralai/Mistral-7B-Instruct-v0.3",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=1024,  # Adjust token limit
+        max_tokens=1024,
         temperature=0.77,
         top_p=0.7,
         top_k=50,
@@ -77,7 +78,6 @@ def get_tech_stack_recommendation(requirements_json):
         ResponseSchema(name="others", description="Other relevant tools or technologies")
     ]
 
-    
     parser = StructuredOutputParser.from_response_schemas(response_schemas)
     try:
         parsed_output = parser.parse(raw_output)
@@ -85,7 +85,41 @@ def get_tech_stack_recommendation(requirements_json):
         print(f"Error: {e}. Returning raw output.")
         return raw_output
     
-    return json.dumps(parsed_output,indent=4)
+    return json.dumps(parsed_output, indent=4)
+
+def generate_architecture_diagram(requirements_json, tech_stack_json):
+    if isinstance(tech_stack_json, str):
+        tech_stack = json.loads(tech_stack_json)
+    else:
+        tech_stack = tech_stack_json
+
+    G = nx.DiGraph()
+    G.add_node("System", type="root")
+    G.add_node("Frontend", type="layer")
+    G.add_node("Backend", type="layer")
+    G.add_node("Database", type="layer")
+
+    G.add_edge("System", "Frontend")
+    G.add_edge("System", "Backend")
+    G.add_edge("Backend", "Database")
+
+    for tech in tech_stack.get("frontend", []):
+        G.add_node(tech["name"], type="frontend")
+        G.add_edge("Frontend", tech["name"])
+
+    for tech in tech_stack.get("backend", []):
+        G.add_node(tech["name"], type="backend")
+        G.add_edge("Backend", tech["name"])
+
+    for tech in tech_stack.get("database", []):
+        G.add_node(tech["name"], type="database")
+        G.add_edge("Database", tech["name"])
+
+    mermaid_format = "graph TD;\n"
+    for edge in G.edges:
+        mermaid_format += f"    {edge[0]} --> {edge[1]}\n"
+
+    return json.dumps({"diagram": mermaid_format}, indent=4)
 
 # if __name__ == "__main__":
 #     requirements = { 
@@ -127,4 +161,10 @@ def get_tech_stack_recommendation(requirements_json):
 #     }
 
 #     recommendations = get_tech_stack_recommendation(requirements)
+#     architecture_diagram = generate_architecture_diagram(requirements, recommendations)
+    
+#     print("Tech Stack Recommendations:")
 #     print(recommendations)
+    
+#     print("\nGenerated Architecture Diagram:")
+#     print(architecture_diagram)
