@@ -24,11 +24,10 @@ class ExtractRequest(BaseModel):
     requirement_text: str
     url: str
 
-# Define the request body model
 class Requirements(BaseModel):
-    functionalRequirement: List[str]  # Array of strings for functional requirements
-    nonFunctionalRequirement: List[str]  # Array of strings for non-functional requirements
-    featureBreakdown: Dict[str, str]  # Mixed type for feature breakdown (key-value pairs)
+    functionalRequirement: List[str]
+    nonFunctionalRequirement: List[str]
+    featureBreakdown: List[Dict[str, str]]  # Updated to List instead of Dict
 
 class TechComponent(BaseModel):
     name: str
