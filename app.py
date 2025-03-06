@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from requirement_analysis.main import extract_requirements
-from architecture_and_tech_stack.main import get_tech_stack_recommendation
+from architecture_and_tech_stack.main import get_tech_stack_recommendation, generate_architecture_diagram
 from typing import List, Dict
 
 
@@ -30,6 +30,16 @@ class Requirements(BaseModel):
     nonFunctionalRequirement: List[str]  # Array of strings for non-functional requirements
     featureBreakdown: Dict[str, str]  # Mixed type for feature breakdown (key-value pairs)
 
+class TechComponent(BaseModel):
+    name: str
+    description: str
+
+class TechStack(BaseModel):
+    frontend: List[TechComponent]
+    backend: List[TechComponent]
+    database: List[TechComponent]
+    API_integrations: List[TechComponent]
+    others: List[TechComponent]
 
 app = FastAPI()
 
@@ -61,7 +71,24 @@ async def tech_stack_recommendation(requirements: Requirements):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
+@app.post("/architecture-diagram")
+async def create_architecture_diagram(requirements: Requirements, tech_stack: TechStack):
+    """
+    Accepts requirements and tech stack in the request body,
+    validates them, and returns an architecture diagram.
+    """
+    if not requirements:
+        raise HTTPException(status_code=400, detail="Requirements are missing in the request body.")
+    
+    if not tech_stack:
+        raise HTTPException(status_code=400, detail="Tech stack is missing in the request body.")
 
+    try:
+        # Convert Pydantic models to dictionaries
+        response = generate_architecture_diagram(requirements.dict(), tech_stack.dict())
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 # Run the FastAPI app (only if executed directly)
 if __name__ == "__main__":
     import uvicorn
