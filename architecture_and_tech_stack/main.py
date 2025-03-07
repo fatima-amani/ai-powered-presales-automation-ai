@@ -88,38 +88,52 @@ def get_tech_stack_recommendation(requirements_json):
     return json.dumps(parsed_output, indent=4)
 
 def generate_architecture_diagram(requirements_json, tech_stack_json):
-    if isinstance(tech_stack_json, str):
-        tech_stack = json.loads(tech_stack_json)
-    else:
-        tech_stack = tech_stack_json
-
-    G = nx.DiGraph()
-    G.add_node("System", type="root")
-    G.add_node("Frontend", type="layer")
-    G.add_node("Backend", type="layer")
-    G.add_node("Database", type="layer")
-
-    G.add_edge("System", "Frontend")
-    G.add_edge("System", "Backend")
-    G.add_edge("Backend", "Database")
-
-    for tech in tech_stack.get("frontend", []):
-        G.add_node(tech["name"], type="frontend")
-        G.add_edge("Frontend", tech["name"])
-
-    for tech in tech_stack.get("backend", []):
-        G.add_node(tech["name"], type="backend")
-        G.add_edge("Backend", tech["name"])
-
-    for tech in tech_stack.get("database", []):
-        G.add_node(tech["name"], type="database")
-        G.add_edge("Database", tech["name"])
-
-    mermaid_format = "graph TD;\n"
-    for edge in G.edges:
-        mermaid_format += f"    {edge[0]} --> {edge[1]}\n"
-
-    return json.dumps({"diagram": mermaid_format}, indent=4)
+    prompt = f"""
+        You are an expert software architect. Given the following project requirements and recommended tech stack, generate a detailed system architecture diagram in Mermaid.js format.
+        
+        Requirements:
+        {json.dumps(requirements_json, indent=2)}
+        
+        Tech Stack:
+        {json.dumps(tech_stack_json, indent=2)}
+        
+        The architecture should include:
+        - Frontend, Backend, and Database layers
+        - API Integrations
+        - Security and Caching mechanisms
+        - Load Balancing and Scaling strategies
+        - Any additional relevant infrastructure components
+        
+        Provide only a valid Mermaid.js diagram in text format, without any additional explanation.
+        """
+    
+    response = client.chat.completions.create(
+        model="mistralai/Mistral-7B-Instruct-v0.3",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=2048,
+        temperature=0.7,
+        top_p=0.8,
+        top_k=50,
+        repetition_penalty=1.1,
+        stop=["</s>"]
+    )
+    
+    raw_output = response.choices[0].message.content.strip()
+    
+    # Define response schema
+    response_schemas = [
+        ResponseSchema(name="diagram", description="Generated Mermaid.js diagram")
+    ]
+    
+    parser = StructuredOutputParser.from_response_schemas(response_schemas)
+    try:
+        parsed_output = parser.parse(raw_output)
+    except Exception as e:
+        print(f"Error: {e}. Returning raw output.")
+        return json.dumps({"diagram": raw_output}, indent=4)
+    print(parsed_output)
+    
+    return json.dumps(parsed_output, indent=4)
 
 # if __name__ == "__main__":
 #     requirements = { 
@@ -166,5 +180,5 @@ def generate_architecture_diagram(requirements_json, tech_stack_json):
 #     print("Tech Stack Recommendations:")
 #     print(recommendations)
     
-#     print("\nGenerated Architecture Diagram:")
-#     print(architecture_diagram)
+    # print("\nGenerated Architecture Diagram:")
+    # print(architecture_diagram)
