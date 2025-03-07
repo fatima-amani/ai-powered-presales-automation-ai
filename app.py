@@ -88,6 +88,7 @@ async def create_architecture_diagram(requirements: Requirements, tech_stack: Te
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+    
 # Run the FastAPI app (only if executed directly)
 if __name__ == "__main__":
     import uvicorn
