@@ -4,6 +4,8 @@ from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 from dotenv import load_dotenv
 from together import Together
 import networkx as nx
+import json
+import re
 
 # Load API key from .env file
 load_dotenv()
@@ -87,26 +89,45 @@ def get_tech_stack_recommendation(requirements_json):
     
     return json.dumps(parsed_output, indent=4)
 
+def clean_json_response(response_text):
+    """
+    Cleans AI response by removing markdown formatting (json) and extra text.
+    """
+    try:
+        # Remove Markdown code block indicators (json ... )
+        if "json" in response_text:
+            response_text = response_text.split("json")[1].split("```")[0].strip()
+        return json.loads(response_text)  # Parse clean JSON
+    except (json.JSONDecodeError, IndexError) as e:
+        logging.error(f"Error parsing AI JSON response: {e}")
+        return {"error": str(e), "raw_output": response_text}
+
 def generate_architecture_diagram(requirements_json, tech_stack_json):
     prompt = f"""
-        You are an expert software architect. Given the following project requirements and recommended tech stack, generate a detailed system architecture diagram in Mermaid.js format.
-        
+        You are an expert software architect. Given the following project requirements and recommended tech stack, generate a structured JSON representation of a system architecture graph.
+
         Requirements:
         {json.dumps(requirements_json, indent=2)}
-        
+
         Tech Stack:
         {json.dumps(tech_stack_json, indent=2)}
-        
-        The architecture should include:
-        - Frontend, Backend, and Database layers
-        - API Integrations
-        - Security and Caching mechanisms
-        - Load Balancing and Scaling strategies
-        - Any additional relevant infrastructure components
-        
-        Provide only a valid Mermaid.js diagram in text format, without any additional explanation.
-        """
-    
+
+        The JSON output must strictly follow this format:
+        {{
+            "nodes": [
+                {{"id": "Frontend", "attributes": {{"type": "service", "technology": "React.js"}}}},
+                {{"id": "Backend", "attributes": {{"type": "service", "technology": "Node.js"}}}},
+                {{"id": "Database", "attributes": {{"type": "storage", "technology": "PostgreSQL"}}}}
+            ],
+            "edges": [
+                {{"source": "Frontend", "target": "Backend", "attributes": {{"protocol": "REST API"}}}},
+                {{"source": "Backend", "target": "Database", "attributes": {{"protocol": "SQL Queries"}}}}
+            ]
+        }}
+
+        Return only valid JSON without any additional text.
+    """
+
     response = client.chat.completions.create(
         model="mistralai/Mistral-7B-Instruct-v0.3",
         messages=[{"role": "user", "content": prompt}],
@@ -117,23 +138,29 @@ def generate_architecture_diagram(requirements_json, tech_stack_json):
         repetition_penalty=1.1,
         stop=["</s>"]
     )
-    
+
     raw_output = response.choices[0].message.content.strip()
-    
-    # Define response schema
-    response_schemas = [
-        ResponseSchema(name="diagram", description="Generated Mermaid.js diagram")
-    ]
-    
-    parser = StructuredOutputParser.from_response_schemas(response_schemas)
-    try:
-        parsed_output = parser.parse(raw_output)
-    except Exception as e:
-        print(f"Error: {e}. Returning raw output.")
-        return json.dumps({"diagram": raw_output}, indent=4)
-    print(parsed_output)
-    
-    return json.dumps(parsed_output, indent=4)
+    graph_data = clean_json_response(raw_output)  # Clean & parse JSON
+
+    if "error" in graph_data:
+        return json.dumps(graph_data, indent=4)  # Return error info
+
+    # Convert JSON structure to NetworkX graph
+    G = nx.DiGraph()
+
+    for node in graph_data.get("nodes", []):
+        G.add_node(node["id"], **node["attributes"])
+
+    for edge in graph_data.get("edges", []):
+        G.add_edge(edge["source"], edge["target"], **edge["attributes"])
+
+    # Convert NetworkX graph to JSON
+    graph_json = {
+        "nodes": [{"id": n, "attributes": G.nodes[n]} for n in G.nodes],
+        "edges": [{"source": u, "target": v, "attributes": G[u][v]} for u, v in G.edges]
+    }
+
+    return graph_json
 
 # if __name__ == "__main__":
 #     requirements = { 
