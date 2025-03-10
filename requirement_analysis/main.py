@@ -4,7 +4,7 @@ import os
 import json
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 import requests
-from .extract_from_doc import extract_text_from_doc, extract_text_from_pdf
+from extract_from_doc import extract_text_from_doc, extract_text_from_pdf
 
 # Load API key from .env file
 load_dotenv()
@@ -64,7 +64,15 @@ def extract_requirements_llm(text):
         
         1. **Functional Requirements**: Clearly list all functional aspects.
         2. **Non-Functional Requirements**: List performance, security, and other system constraints.
-        3. **Feature Breakdown**: Break down features into components and descriptions.
+        3. **Feature Breakdown**: Break down features into components, descriptions, and intelligently inferred subfeatures.
+
+        The AI must **analyze each feature’s description** and determine **subfeatures** that are logically required for implementation.
+        These subfeatures should:
+        - Represent smaller tasks or functionalities necessary for the feature to be fully functional.
+        - Be based on standard best practices, common workflows, and implicit dependencies.
+        - Be relevant to the given context and technical feasibility.
+
+        Each **feature and subfeature must include a clear description** explaining what it does and why it is needed.
 
         Ensure the output strictly follows this JSON format:
 
@@ -81,18 +89,41 @@ def extract_requirements_llm(text):
             ],
             "feature_breakdown": [
                 {{
-                    "component": "Component Name",
-                    "description": "Component Description"
-                }},
-                ...
+                    "module": "Module Name",
+                    "features": [
+                        {{
+                            "name": "Feature Name",
+                            "description": "Brief but clear explanation of what this feature does and why it is necessary.",
+                            "subfeatures": [
+                                {{
+                                    "name": "Subfeature Name",
+                                    "description": "Detailed description of what this subfeature does and how it supports the feature."
+                                }},
+                                ...
+                            ]
+                        }},
+                        ...
+                    ]
+                }}
             ]
         }}
+
+        When generating subfeatures:
+        - If a feature involves **user authentication**, include subfeatures like "Password Encryption", "Multi-Factor Authentication", or "Session Management".
+        - If a feature involves **payments**, include subfeatures like "Payment Validation", "Transaction Logging", or "Refund Handling".
+        - If a feature is related to **reporting**, consider subfeatures like "Export to PDF", "Graphical Summary", or "Data Filters".
+        - If a feature involves **real-time updates**, include subfeatures like "WebSocket Integration", "Push Notifications", or "Live Data Sync".
+
+        **Think like a software architect** when breaking down features into subfeatures.
+
+        📌 **Every feature and subfeature must have a meaningful description**. Do not leave any descriptions empty.
 
         Input Text:
         {text}
 
         Provide the output in valid JSON format only, without any additional text.
         """
+
 
     response = client.chat.completions.create(
         model="mistralai/Mistral-7B-Instruct-v0.3",
@@ -126,7 +157,7 @@ def extract_requirements_llm(text):
 
 if __name__ == "__main__":
     requirement_text = "Specify the key requirements for the system."
-    url = "https://res.cloudinary.com/depfpw7ym/image/upload/v1741238110/pre_sales_automation_dev/cq9n8dxpeeezvzljbtte.pdf"  # Replace with a valid Cloudinary URL
+    url = "https://res.cloudinary.com/depfpw7ym/image/upload/v1741325185/pre_sales_automation_dev/xultx0enrt8bj0wvpour.pdf"  # Replace with a valid Cloudinary URL
     
     processed_requirements = extract_requirements(requirement_text, url)
     
