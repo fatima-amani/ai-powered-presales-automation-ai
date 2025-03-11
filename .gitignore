@@ -3,3 +3,5 @@ myenv/
 .env
 
 requirements_env/
+
+time_and_effort_estimation/estimate_data/

@@ -1,0 +1,48 @@
+The following is structured pricing data for various applications in a medical software system:
+
+Category: Patient Mobile Application
+- Mobile Frontend - Flutter requires 81.84 days, billed at INR 15.0 per hour, totaling 9820.8 INR.
+- Backend - Java Spring Boot requires 55.044 days, billed at INR 16.0 per hour, totaling 7045.63 INR.
+- Deployment, CI / CD requires 5.0 days, billed at INR 14.0 per hour, totaling 560.0 INR.
+- Management requires 18.889992 days, billed at INR 18.0 per hour, totaling 2720.16 INR.
+- Testing requires 20.5326 days, billed at INR 12.0 per hour, totaling 1971.13 INR.
+
+Category: Doctor Mobile Application
+- Mobile Frontend - Flutter requires 80.9726 days, billed at INR 15.0 per hour, totaling 9716.71 INR.
+- Backend - Java Spring Boot requires 56.76 days, billed at INR 16.0 per hour, totaling 7265.28 INR.
+- Deployment, CI / CD requires 5.0 days, billed at INR 14.0 per hour, totaling 560.0 INR.
+- Management requires 18.968064 days, billed at INR 18.0 per hour, totaling 2731.4 INR.
+- Testing requires 20.3346 days, billed at INR 12.0 per hour, totaling 1952.12 INR.
+
+Category: Receptionist Mobile Application
+- Mobile Frontend - Flutter requires 48.84 days, billed at INR 15.0 per hour, totaling 5860.8 INR.
+- Backend - Java Spring Boot requires 37.884 days, billed at INR 16.0 per hour, totaling 4849.15 INR.
+- Deployment, CI / CD requires 5.0 days, billed at INR 14.0 per hour, totaling 560.0 INR.
+- Management requires 11.967912 days, billed at INR 18.0 per hour, totaling 1723.38 INR.
+- Testing requires 20.3346 days, billed at INR 12.0 per hour, totaling 1952.12 INR.
+
+Category: Clinic Assistant Mobile Application
+- Mobile Frontend - Flutter requires 16.74 days, billed at INR 15.0 per hour, totaling 2008.8 INR.
+- Backend - Java Spring Boot requires 12.012 days, billed at INR 16.0 per hour, totaling 1537.54 INR.
+- Deployment, CI / CD requires 4.0 days, billed at INR 14.0 per hour, totaling 448.0 INR.
+- Management requires 3.997908 days, billed at INR 18.0 per hour, totaling 575.7 INR.
+- Testing requires 4.5639 days, billed at INR 12.0 per hour, totaling 438.13 INR.
+
+Category: Doctor Web Application
+- Web Frontend - Flutter / React requires 117.48 days, billed at INR 15.0 per hour, totaling 14097.6 INR.
+- Backend - Java Spring Boot requires 90.42 days, billed at INR 16.0 per hour, totaling 11573.76 INR.
+- Deployment, CI / CD requires 5.0 days, billed at INR 14.0 per hour, totaling 560.0 INR.
+- Management requires 28.6902 days, billed at INR 18.0 per hour, totaling 4131.39 INR.
+- Testing requires 31.185 days, billed at INR 12.0 per hour, totaling 2993.76 INR.
+
+Category: Integrations
+- Calendar requires 5.0 days, billed at INR 16.0 per hour, totaling 640.0 INR.
+- Notifications requires 4.0 days, billed at INR 16.0 per hour, totaling 512.0 INR.
+- Video Conferencing requires 6.0 days, billed at INR 16.0 per hour, totaling 768.0 INR.
+- Payment Gateway requires 6.0 days, billed at INR 16.0 per hour, totaling 768.0 INR.
+- Camera requires 3.0 days, billed at INR 16.0 per hour, totaling 384.0 INR.
+- Messenger requires 5.0 days, billed at INR 16.0 per hour, totaling 640.0 INR.
+- Smart watch integration requires 6.0 days, billed at INR 16.0 per hour, totaling 768.0 INR.
+- Maps requires 4.0 days, billed at INR 16.0 per hour, totaling 512.0 INR.
+- Integration with Adhaar requires 4.0 days, billed at INR 16.0 per hour, totaling 512.0 INR.
+- Integration with Digi Locker requires 4.0 days, billed at INR 16.0 per hour, totaling 512.0 INR.
