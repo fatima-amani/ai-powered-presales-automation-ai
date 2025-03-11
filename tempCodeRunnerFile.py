@@ -1,1 +1,1 @@
-functionalRequirement
+/generate-user-persona

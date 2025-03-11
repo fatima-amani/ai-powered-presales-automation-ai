@@ -4,7 +4,7 @@ import os
 import json
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 import requests
-from extract_from_doc import extract_text_from_doc, extract_text_from_pdf
+from .extract_from_doc import extract_text_from_doc, extract_text_from_pdf
 
 # Load API key from .env file
 load_dotenv()

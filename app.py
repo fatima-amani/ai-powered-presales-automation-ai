@@ -1,12 +1,14 @@
 import os
-from fastapi import FastAPI, Form, HTTPException
+from fastapi import FastAPI, Form, HTTPException, Response
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from requirement_analysis.main import extract_requirements
 from architecture_and_tech_stack.main import get_tech_stack_recommendation, generate_architecture_diagram
+from time_and_effort_estimation.main import generate_effort_excel
+from business_analyst.main import get_user_persona
 from typing import List, Dict
-
+import json
 
 app = FastAPI()
 
@@ -19,15 +21,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Define the request body model
-class ExtractRequest(BaseModel):
-    requirement_text: str
-    url: str
+# Define request body models
+class ModuleFeature(BaseModel):
+    name: str
+    description: str
+
+class Module(BaseModel):
+    module: str
+    features: List[ModuleFeature]
 
 class Requirements(BaseModel):
     functionalRequirement: List[str]
     nonFunctionalRequirement: List[str]
-    featureBreakdown: List[Dict[str, str]]  # Updated to List instead of Dict
+    featureBreakdown: List[Module]
 
 class TechComponent(BaseModel):
     name: str
@@ -40,32 +46,32 @@ class TechStack(BaseModel):
     API_integrations: List[TechComponent]
     others: List[TechComponent]
 
-app = FastAPI()
+class RequirementRequest(BaseModel):
+    requirement_json: Dict
 
-# Define response endpoint
 @app.get("/")
 async def get_response():
     return "hello world"
 
 @app.post("/extract")
-async def extract(req: ExtractRequest):
+async def extract(req: Requirements):
     try:
-        result = extract_requirements(req.requirement_text, req.url)
+        result = extract_requirements(req.dict())
         return {"message": "Extraction successful", "data": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/tech-stack-recommendation")
-async def tech_stack_recommendation(requirements: Requirements):
+async def tech_stack_recommendation(req: Requirements):
     """
-    Accepts requirements in the request body, validates them, and returns a tech stack recommendation.
+    Accepts a detailed requirement request body, validates it,
+    and returns a tech stack recommendation.
     """
-    if not requirements:
+    if not req:
         raise HTTPException(status_code=400, detail="Requirements are missing in the request body.")
 
     try:
-        # Convert Pydantic model to a dictionary
-        response = get_tech_stack_recommendation(requirements.dict())
+        response = get_tech_stack_recommendation(req.dict())
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
@@ -83,13 +89,40 @@ async def create_architecture_diagram(requirements: Requirements, tech_stack: Te
         raise HTTPException(status_code=400, detail="Tech stack is missing in the request body.")
 
     try:
-        # Convert Pydantic models to dictionaries
         response = generate_architecture_diagram(requirements.dict(), tech_stack.dict())
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
-    
-# Run the FastAPI app (only if executed directly)
+
+@app.post("/estimate")
+async def estimate_effort(req: Requirements):
+    try:
+        output_excel = "effort_estimation.xlsx"
+        generate_effort_excel(req.dict(), output_excel)
+        
+        with open(output_excel, "rb") as file:
+            excel_data = file.read()
+        
+        return Response(
+            content=excel_data,
+            media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            headers={"Content-Disposition": f"attachment; filename={output_excel}"}
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/generate-user-persona")
+async def generate_user_persona(request: RequirementRequest):
+    """
+    FastAPI endpoint to process requirements and generate user personas.
+    """
+    try:
+        requirement_str = json.dumps(request.requirement_json)
+        response_json = get_user_persona(requirement_str)
+        return json.loads(response_json)  # Ensures a valid JSON response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
