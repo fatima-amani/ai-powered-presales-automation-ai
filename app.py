@@ -49,17 +49,24 @@ class TechStack(BaseModel):
 class RequirementRequest(BaseModel):
     requirement_json: Dict
 
+class ExtractRequest(BaseModel):
+     requirement_text: str
+     url: str
+ 
+
+
 @app.get("/")
 async def get_response():
     return "hello world"
 
 @app.post("/extract")
-async def extract(req: Requirements):
-    try:
-        result = extract_requirements(req.dict())
-        return {"message": "Extraction successful", "data": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+def extract(req: ExtractRequest):
+     try:
+         result = extract_requirements(req.requirement_text, req.url)
+         return {"message": "Extraction successful", "data": result}
+     except Exception as e:
+         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/tech-stack-recommendation")
 async def tech_stack_recommendation(req: Requirements):
