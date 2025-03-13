@@ -265,6 +265,8 @@ def parse_llm_response(response_text):
         print(f"\n❌ Error parsing JSON: {e}")
         return None  # Return None to handle it gracefully
 
+import pandas as pd
+
 def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xlsx"):
     """Generate effort and cost estimation Excel file with two sheets."""
     
@@ -273,7 +275,6 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
     # Handle parsing errors
     if not effort_data:
         print("\n⚠️ No valid effort estimation data available. Falling back to original parser.")
-        # Try with the original parser as a last resort
         raw_output = client.chat.completions.create(
             model="mistralai/Mistral-7B-Instruct-v0.3",
             messages=[{"role": "user", "content": f"Parse this JSON and return only valid JSON: {feature_breakdown}"}],
@@ -295,12 +296,21 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
             feature_name = feature["name"]
             for subfeature in feature.get("subfeatures", []):
                 subfeature_name = subfeature["name"]
+
+                # Skip 'testing' subfeature
+                if subfeature_name.lower() == "testing":
+                    continue
+
                 dev_days = subfeature["development_days"]
-                test_days = subfeature["testing_days"]
+                dev_buffer = dev_days * 0.2  # 20% buffer
+                test_days = 0.2 * (dev_days + dev_buffer)  # 20% of (Dev Days + Dev Buffer)
                 devops_days = subfeature["devops_days"]
 
                 # Append effort estimation data
-                effort_rows.append([module_name, feature_name, subfeature_name, dev_days, test_days, devops_days])
+                effort_rows.append([
+                    module_name, feature_name, subfeature_name,
+                    dev_days, dev_buffer, test_days, devops_days
+                ])
 
                 # Cost calculations
                 dev_cost = dev_days * pricing_model["Mid"]
@@ -310,29 +320,34 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
                 # Append cost estimation data
                 cost_rows.append([
                     module_name, feature_name, subfeature_name,
-                    dev_days, dev_cost, test_days, test_cost, devops_days, devops_cost
+                    dev_days, dev_buffer, test_days, test_cost,
+                    devops_days, devops_cost
                 ])
 
     # Convert to DataFrames
-    effort_df = pd.DataFrame(effort_rows, columns=["Module", "Feature", "Subfeature", "Dev Days", "Test Days", "DevOps Days"])
+    effort_df = pd.DataFrame(effort_rows, columns=[
+        "Module", "Feature", "Subfeature", "Dev Days", "Dev Buffer", "Test Days", "DevOps Days"
+    ])
+    
     cost_df = pd.DataFrame(cost_rows, columns=[
-        "Module", "Feature", "Subfeature", "Dev Days", "Dev Cost",
+        "Module", "Feature", "Subfeature", "Dev Days", "Dev Buffer", 
         "Test Days", "Test Cost", "DevOps Days", "DevOps Cost"
     ])
 
-    # Add summary rows with totals
-    effort_df.loc["Total"] = ["", "", "Total", 
-                             effort_df["Dev Days"].sum(), 
-                             effort_df["Test Days"].sum(), 
-                             effort_df["DevOps Days"].sum()]
-                             
-    cost_df.loc["Total"] = ["", "", "Total", 
-                           cost_df["Dev Days"].sum(), 
-                           cost_df["Dev Cost"].sum(),
-                           cost_df["Test Days"].sum(), 
-                           cost_df["Test Cost"].sum(),
-                           cost_df["DevOps Days"].sum(), 
-                           cost_df["DevOps Cost"].sum()]
+    # Ensure the total row has the same number of columns
+    total_effort_row = ["Total", "", "Total"] + effort_df.iloc[:, 3:].sum().tolist()
+    total_cost_row = ["Total", "", "Total"] + cost_df.iloc[:, 3:].sum().tolist()
+
+    # Append units row
+    unit_effort_row = ["", "", "Units", "days", "days", "days", "days"]
+    unit_cost_row = ["", "", "Units", "days", "days", "days", "USD", "days", "USD"]
+
+    # Append total and unit rows
+    effort_df.loc[len(effort_df)] = total_effort_row
+    effort_df.loc[len(effort_df)] = unit_effort_row
+
+    cost_df.loc[len(cost_df)] = total_cost_row
+    cost_df.loc[len(cost_df)] = unit_cost_row
 
     # Save to Excel with two sheets
     with pd.ExcelWriter(output_excel, engine="xlsxwriter") as writer:
@@ -340,6 +355,7 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
         cost_df.to_excel(writer, sheet_name="Cost Estimation", index=False)
 
     print(f"\n✅ Effort estimation Excel file generated: {output_excel}")
+
 
 if __name__ == "__main__":
     # Example JSON feature breakdown (same as your original example)
