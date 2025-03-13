@@ -130,12 +130,24 @@ async def generate_user_persona(request: RequirementRequest):
         response_json =  {"user_persona": json.loads(user_persona), "categorized_features": json.loads(categorized_features)}
         # print(response_json)
 
-        # response_json = json.dumps(response_json)
-        # return json.loads(response_json)
-
         return response_json
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/generate-wireframe")
+async def generate_wireframe(req: Requirements):
+    """
+    Accepts a detailed requirement request body, validates it,
+    and returns a tech stack recommendation.
+    """
+    if not req:
+        raise HTTPException(status_code=400, detail="Requirements are missing in the request body.")
+
+    try:
+        response ={"message" : "Wireframe generation is under maintenance"}
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
