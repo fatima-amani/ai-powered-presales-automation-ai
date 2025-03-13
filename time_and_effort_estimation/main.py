@@ -340,7 +340,7 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
 
     # Append units row
     unit_effort_row = ["", "", "Units", "days", "days", "days", "days"]
-    unit_cost_row = ["", "", "Units", "days", "days", "days", "USD", "days", "USD"]
+    unit_cost_row = ["", "", "Units", "days", "days", "days", "INR", "days", "INR"]
 
     # Append total and unit rows
     effort_df.loc[len(effort_df)] = total_effort_row
