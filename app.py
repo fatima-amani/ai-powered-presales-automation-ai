@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from requirement_analysis.main import extract_requirements
 from architecture_and_tech_stack.main import get_tech_stack_recommendation, generate_architecture_diagram
 from time_and_effort_estimation.main import generate_effort_excel
-from business_analyst.main import get_user_persona
+from business_analyst.main import get_user_persona, categorize_features
 from typing import List, Dict
 import json
 
@@ -125,8 +125,15 @@ async def generate_user_persona(request: RequirementRequest):
     """
     try:
         requirement_str = json.dumps(request.requirement_json)
-        response_json = get_user_persona(requirement_str)
-        return json.loads(response_json)  # Ensures a valid JSON response
+        user_persona = get_user_persona(requirement_str)
+        categorized_features = categorize_features(requirement_str)
+        response_json =  {"user_persona": json.loads(user_persona), "categorized_features": json.loads(categorized_features)}
+        # print(response_json)
+
+        # response_json = json.dumps(response_json)
+        # return json.loads(response_json)
+
+        return response_json
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
