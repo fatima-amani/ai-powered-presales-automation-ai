@@ -12,10 +12,10 @@ import json
 
 app = FastAPI()
 
-# Enable CORS for frontend communication
+# Enable CORS 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Update with frontend URL if deployed
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
