@@ -209,8 +209,8 @@ def estimate_effort(feature_breakdown):
     raw_output = response.choices[0].message.content.strip()
 
     # Debugging: Print raw output
-    print("\n🔹 Raw Response from LLM:")
-    print(raw_output)
+    # print("\n Raw Response from LLM:")
+    # print(raw_output)
 
     try:
         # Parse using the Langchain parser
