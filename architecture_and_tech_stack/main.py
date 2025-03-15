@@ -99,7 +99,7 @@ def clean_json_response(response_text):
             response_text = response_text.split("json")[1].split("```")[0].strip()
         return json.loads(response_text)  # Parse clean JSON
     except (json.JSONDecodeError, IndexError) as e:
-        logging.error(f"Error parsing AI JSON response: {e}")
+        # logging.error(f"Error parsing AI JSON response: {e}")
         return {"error": str(e), "raw_output": response_text}
 
 def generate_architecture_diagram(requirements_json, tech_stack_json):
