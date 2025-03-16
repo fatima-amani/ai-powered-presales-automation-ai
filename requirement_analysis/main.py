@@ -1,4 +1,5 @@
 import json
+import time
 import re
 from dotenv import load_dotenv
 from together import Together
@@ -63,7 +64,7 @@ def extract_requirements(requirement_text: str, url: str):
 
     return extract_requirements_llm(combined_text)
 
-def extract_requirements_llm(text, max_retries=3):
+def extract_requirements_llm(text, max_retries=3, delay=2):
     """Extract functional and non-functional requirements from software requirements text with retry logic."""
 
     attempt = 0
@@ -133,13 +134,14 @@ def extract_requirements_llm(text, max_retries=3):
         except ValueError as e:
             print(f"Attempt {attempt + 1} failed: {e}. Retrying...")
             attempt += 1
+            time.sleep(delay)
 
     print("Max retries reached. Returning raw output.")
     return raw_output
 
 if __name__ == "__main__":
     requirement_text = "Specify the key requirements for the system."
-    url = "https://res.cloudinary.com/depfpw7ym/image/upload/v1742036360/pre_sales_automation_dev/zup4j71n3eseuoahnqgp.pdf"  # Replace with a valid Cloudinary URL
+    url = "https://res.cloudinary.com/depfpw7ym/image/upload/v1742037301/pre_sales_automation_dev/fog6ak0b56aaffwosyku.pdf"  # Replace with a valid Cloudinary URL
     
     processed_requirements = extract_requirements(requirement_text, url)
     
