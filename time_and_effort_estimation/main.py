@@ -14,11 +14,11 @@ api_key = os.getenv("TOGETHER_API_KEY")
 # Initialize Together client
 client = Together(api_key=api_key)
 
-# Pricing model (cost per day for each developer level)
+# Updated pricing model (hourly rates in INR)
 pricing_model = {
-    "Junior": 100,
-    "Mid": 200,
-    "Senior": 300
+    "Frontend": 15,
+    "Backend": 16,
+    "Testing": 12
 }
 
 # Define Pydantic models for structured output parsing
@@ -29,7 +29,9 @@ class Subfeature(BaseModel):
 
 class Feature(BaseModel):
     name: str = Field(description="Name of the feature")
-    subfeatures: List[Subfeature] = Field(description="List of subfeatures with effort estimations")
+    subfeatures: Optional[List[Subfeature]] = Field(default_factory=list, description="List of subfeatures with effort estimations")
+    frontend_days: Optional[float] = Field(None, description="Direct frontend days if no subfeatures")
+    backend_days: Optional[float] = Field(None, description="Direct backend days if no subfeatures")
 
 class Module(BaseModel):
     module: str = Field(description="Name of the module")
@@ -160,30 +162,20 @@ def estimate_effort(feature_breakdown):
         - **Frontend Development** (UI/UX implementation, client-side functionality)
         - **Backend Development** (Server-side logic, APIs, databases)
         
-        The estimation should be **granular**, providing effort at the **subfeature level** while maintaining the module and feature hierarchy.
-
-        Use the following historical context to improve time estimation accuracy:
+        The estimation must follow this EXACT structure:
+        - Each module has a name and list of features
+        - Each feature has a name and list of subfeatures
+        - If a feature has direct effort values, still create a single subfeature with the same name
         
-        {time_estimate_context}
-
-        Use the following historical context to improve cost estimation accuracy:
-        
-        {cost_estimate_context}
-
         {format_instructions}
-
-        **Guidelines:**
-        - Assign **realistic effort estimates** based on standard development practices.
-        - For frontend development, consider complexity of UI components, responsiveness, and client-side logic.
-        - For backend development, consider data models, API complexity, and business logic.
-        - Complex subfeatures (e.g., authentication, API integrations) should have **higher effort estimates**.
-        - Simple subfeatures (e.g., UI changes, minor configurations) should have **lower effort estimates**.
-        - Ensure all values are in whole or decimal numbers representing effort in **days**.
+        
+        # IMPORTANT: Every feature MUST have a subfeatures array, even if it only contains one item.
+        # Do NOT omit the subfeatures field for any feature.
 
         Features & Subfeatures:
         {feature_breakdown}
 
-        Provide the output in valid JSON format only, without any additional text.
+        Provide the output in valid JSON format only.
     """
 
     response = client.chat.completions.create(
@@ -249,6 +241,58 @@ def parse_llm_response(response_text):
     except (json.JSONDecodeError, ValueError) as e:
         print(f"\n❌ Error parsing JSON: {e}")
         return None  # Return None to handle it gracefully
+    
+def manual_parse_effort(raw_output):
+    """Last resort manual parsing of effort data with structural fixes."""
+    try:
+        # Preprocess to fix common issues
+        json_str = preprocess_llm_response(raw_output)
+        data = json.loads(json_str)
+        
+        # Check and fix module structure
+        if "effort_estimation" in data:
+            for i, module in enumerate(data["effort_estimation"]):
+                # Ensure features exists
+                if "features" not in module:
+                    module["features"] = []
+                
+                # Add missing subfeatures
+                for j, feature in enumerate(module["features"]):
+                    if "subfeatures" not in feature:
+                        if "frontend_days" in feature:
+                            # Create subfeature from feature itself
+                            feature["subfeatures"] = [{
+                                "name": feature.get("name", "Unknown"),
+                                "frontend_days": feature.get("frontend_days", 0),
+                                "backend_days": feature.get("backend_days", 0)
+                            }]
+        
+        return data
+    except Exception as e:
+        print(f"Manual parsing failed: {e}")
+        return None
+    
+def preprocess_llm_response(raw_output):
+    """Clean and fix common JSON formatting issues from LLM responses."""
+    # Try to extract just the JSON part
+    json_start = raw_output.find('{')
+    json_end = raw_output.rfind('}') + 1
+    
+    if json_start >= 0 and json_end > json_start:
+        json_str = raw_output[json_start:json_end]
+        
+        # Fix for features without subfeatures
+        import re
+        pattern = r'"features":\s*\[\s*{\s*"name":\s*"([^"]+)",\s*"frontend_days":'
+        replacement = r'"features": [{"name": "\1", "subfeatures": [{"name": "\1", "frontend_days":'
+        json_str = re.sub(pattern, replacement, json_str)
+        
+        # Fix for unclosed arrays or missing commas
+        json_str = json_str.replace('"}]"}', '"}]}')
+        json_str = json_str.replace('"Testing"}', '"Testing"}]')
+        
+        return json_str
+    return raw_output
 
 def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xlsx"):
     """Generate effort and cost estimation Excel file with two sheets."""
@@ -272,6 +316,11 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
     
     effort_rows = []
     cost_rows = []
+    
+    # For collecting data for cost summary
+    frontend_total_days = 0
+    backend_total_days = 0
+    testing_total_days = 0
     
     for module in effort_data["effort_estimation"]:
         module_name = module["module"]
@@ -303,9 +352,14 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
                     backend_days, backend_buffer, backend_testing
                 ])
 
-                # Cost calculations for cost sheet
-                frontend_cost = frontend_days * pricing_model["Mid"]
-                backend_cost = backend_days * pricing_model["Senior"]
+                # Update total days for cost summary
+                frontend_total_days += (frontend_days + frontend_buffer) * 1.1
+                backend_total_days += (backend_days + backend_buffer) * 1.1
+                testing_total_days += frontend_testing * 1.1  # Using frontend testing as requested
+
+                # Original cost calculations (kept for compatibility)
+                frontend_cost = frontend_days * pricing_model["Frontend"] * 8
+                backend_cost = backend_days * pricing_model["Backend"] * 8
 
                 # Append cost estimation data
                 cost_rows.append([
@@ -333,7 +387,6 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
 
     # Append units row
     unit_effort_row = ["", "", "Units", "days", "days", "days", "days", "days", "days"]    
-    # Make sure this has exactly 11 elements to match the 11 columns in cost_df
     unit_cost_row = ["", "", "Units", "days", "days", "INR", "days", "days", "INR"]
 
     # Append total and unit rows
@@ -343,12 +396,53 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
     cost_df.loc[len(cost_df)] = total_cost_row
     cost_df.loc[len(cost_df)] = unit_cost_row
 
-    # Save to Excel with two sheets
+    # Create new cost summary format as per the screenshot
+    cost_summary_data = [
+        ["Frontend", frontend_total_days, pricing_model["Frontend"], frontend_total_days * 8 * pricing_model["Frontend"]],
+        ["Backend", backend_total_days, pricing_model["Backend"], backend_total_days * 8 * pricing_model["Backend"]],
+        ["Testing", testing_total_days, pricing_model["Testing"], testing_total_days * 8 * pricing_model["Testing"]]
+    ]
+    
+    # Calculate total cost
+    total_cost = sum(row[3] for row in cost_summary_data)
+    cost_summary_data.append(["Total", "", "", total_cost])
+    
+    # Create DataFrame for cost summary
+    cost_summary_df = pd.DataFrame(cost_summary_data, columns=[
+        "Item", "Effort in Days", "Rate per hour (IN INR)", "Pricing"
+    ])
+    
+    # Format the pricing column with Indian Rupee symbol
+    cost_summary_df["Pricing"] = cost_summary_df["Pricing"].apply(lambda x: f"₹{x:,.2f}" if isinstance(x, (int, float)) else x)
+    
+    # Save to Excel with sheets
     with pd.ExcelWriter(output_excel, engine="xlsxwriter") as writer:
         effort_df.to_excel(writer, sheet_name="Effort Estimation", index=False)
-        cost_df.to_excel(writer, sheet_name="Cost Estimation", index=False)
+        # cost_df.to_excel(writer, sheet_name="Cost Estimation", index=False)
+        cost_summary_df.to_excel(writer, sheet_name="Cost Summary", index=False)
+        
+        # Get the xlsxwriter workbook and worksheet objects
+        workbook = writer.book
+        worksheet = writer.sheets["Cost Summary"]
+        
+        # Define formats
+        header_format = workbook.add_format({
+            'bold': True,
+            'text_wrap': True,
+            'valign': 'top',
+            'border': 1
+        })
+        
+        # Apply formats to headers
+        for col_num, value in enumerate(cost_summary_df.columns.values):
+            worksheet.write(0, col_num, value, header_format)
+        
+        # Auto-fit columns
+        for i, col in enumerate(cost_summary_df.columns):
+            column_width = max(cost_summary_df[col].astype(str).map(len).max(), len(col))
+            worksheet.set_column(i, i, column_width + 2)
 
-    print(f"\n✅ Effort estimation Excel file generated: {output_excel}")
+    print(f"\n✅ Cost estimation Excel file generated with new Cost Summary sheet: {output_excel}")
 
 if __name__ == "__main__":
     # Example JSON feature breakdown (same as your original example)
