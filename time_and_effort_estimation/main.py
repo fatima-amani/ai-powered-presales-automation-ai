@@ -24,9 +24,8 @@ pricing_model = {
 # Define Pydantic models for structured output parsing
 class Subfeature(BaseModel):
     name: str = Field(description="Name of the subfeature")
-    development_days: float = Field(description="Number of days required for development")
-    testing_days: float = Field(description="Number of days required for testing")
-    devops_days: float = Field(description="Number of days required for DevOps")
+    frontend_days: float = Field(description="Number of days required for frontend development")
+    backend_days: float = Field(description="Number of days required for backend development")
 
 class Feature(BaseModel):
     name: str = Field(description="Name of the feature")
@@ -35,11 +34,10 @@ class Feature(BaseModel):
 class Module(BaseModel):
     module: str = Field(description="Name of the module")
     features: List[Feature] = Field(description="List of features in this module")
-    development_days: Optional[float] = Field(None, description="Total development days for the module")
-    testing_days: Optional[float] = Field(None, description="Total testing days for the module")
-    devops_days: Optional[float] = Field(None, description="Total DevOps days for the module")
+    frontend_days: Optional[float] = Field(None, description="Total frontend development days for the module")
+    backend_days: Optional[float] = Field(None, description="Total backend development days for the module")
 
-    @validator('development_days', 'testing_days', 'devops_days', pre=True, always=False)
+    @validator('frontend_days', 'backend_days', pre=True, always=False)
     def set_totals(cls, v, values):
         # This validator will be skipped during the parsing phase and only used for validation
         return v or 0.0
@@ -55,27 +53,27 @@ class EffortEstimation(BaseModel):
         }
 
 def estimate_effort(feature_breakdown):
-    """Estimate development, testing, and DevOps efforts using Mistral LLM with Langchain parser."""
+    """Estimate frontend and backend efforts using Mistral LLM with Langchain parser."""
     
     # Initialize the Pydantic parser
     parser = PydanticOutputParser(pydantic_object=EffortEstimation)
     
     # Load RAG context from file
     try:
-        with open("time_estimate_context.txt", "r", encoding="utf-8") as file:
+        with open("C:/Users/aitha/Desktop/PreSales Automation/ai-powered-presales-automation-ai/time_estimate_context.txt", "r", encoding="utf-8") as file:
             time_estimate_context = file.read()
     except FileNotFoundError:
         # Fallback if file doesn't exist
-        context = "No historical context available."
-        print("\n⚠️ rag_context.txt file not found. Proceeding without historical context.")
+        time_estimate_context = "No historical context available."
+        print("\n⚠️ time_estimate_context.txt file not found. Proceeding without historical context.")
     
     try:
-        with open("cost_estimate_context.txt", "r", encoding="utf-8") as file:
+        with open("C:/Users/aitha/Desktop/PreSales Automation/ai-powered-presales-automation-ai/cost_estimate_context.txt", "r", encoding="utf-8") as file:
             cost_estimate_context = file.read()
     except FileNotFoundError:
         # Fallback if file doesn't exist
-        context = "No historical context available."
-        print("\n⚠️ rag_context.txt file not found. Proceeding without historical context.")
+        cost_estimate_context = "No historical context available."
+        print("\n⚠️ cost_estimate_context.txt file not found. Proceeding without historical context.")
     
     # Modified format instructions for Pydantic v1
     format_instructions = """
@@ -119,42 +117,32 @@ def estimate_effort(feature_breakdown):
                                                     "description": "Name of the subfeature",
                                                     "type": "string"
                                                 },
-                                                "development_days": {
-                                                    "title": "Development Days",
-                                                    "description": "Number of days required for development",
+                                                "frontend_days": {
+                                                    "title": "Frontend Days",
+                                                    "description": "Number of days required for frontend development",
                                                     "type": "number"
                                                 },
-                                                "testing_days": {
-                                                    "title": "Testing Days",
-                                                    "description": "Number of days required for testing",
-                                                    "type": "number"
-                                                },
-                                                "devops_days": {
-                                                    "title": "Devops Days",
-                                                    "description": "Number of days required for DevOps",
+                                                "backend_days": {
+                                                    "title": "Backend Days",
+                                                    "description": "Number of days required for backend development",
                                                     "type": "number"
                                                 }
                                             },
-                                            "required": ["name", "development_days", "testing_days", "devops_days"]
+                                            "required": ["name", "frontend_days", "backend_days"]
                                         }
                                     }
                                 },
                                 "required": ["name", "subfeatures"]
                             }
                         },
-                        "development_days": {
-                            "title": "Development Days",
-                            "description": "Total development days for the module",
+                        "frontend_days": {
+                            "title": "Frontend Days",
+                            "description": "Total frontend development days for the module",
                             "type": "number"
                         },
-                        "testing_days": {
-                            "title": "Testing Days",
-                            "description": "Total testing days for the module",
-                            "type": "number"
-                        },
-                        "devops_days": {
-                            "title": "Devops Days",
-                            "description": "Total DevOps days for the module",
+                        "backend_days": {
+                            "title": "Backend Days",
+                            "description": "Total backend development days for the module",
                             "type": "number"
                         }
                     },
@@ -169,9 +157,8 @@ def estimate_effort(feature_breakdown):
     prompt = f"""
         Based on the given software features and subfeatures, estimate effort (in days) for each role:
         
-        - **Development**
-        - **Testing**
-        - **DevOps**
+        - **Frontend Development** (UI/UX implementation, client-side functionality)
+        - **Backend Development** (Server-side logic, APIs, databases)
         
         The estimation should be **granular**, providing effort at the **subfeature level** while maintaining the module and feature hierarchy.
 
@@ -187,6 +174,8 @@ def estimate_effort(feature_breakdown):
 
         **Guidelines:**
         - Assign **realistic effort estimates** based on standard development practices.
+        - For frontend development, consider complexity of UI components, responsiveness, and client-side logic.
+        - For backend development, consider data models, API complexity, and business logic.
         - Complex subfeatures (e.g., authentication, API integrations) should have **higher effort estimates**.
         - Simple subfeatures (e.g., UI changes, minor configurations) should have **lower effort estimates**.
         - Ensure all values are in whole or decimal numbers representing effort in **days**.
@@ -207,10 +196,6 @@ def estimate_effort(feature_breakdown):
     )
 
     raw_output = response.choices[0].message.content.strip()
-
-    # Debugging: Print raw output
-    # print("\n Raw Response from LLM:")
-    # print(raw_output)
 
     try:
         # Parse using the Langchain parser
@@ -255,7 +240,7 @@ def parse_llm_response(response_text):
                     raise ValueError("Missing required keys in feature structure.")
 
                 for subfeature in feature["subfeatures"]:
-                    required_keys = {"name", "development_days", "testing_days", "devops_days"}
+                    required_keys = {"name", "frontend_days", "backend_days"}
                     if not required_keys.issubset(subfeature):
                         raise ValueError(f"Subfeature {subfeature.get('name', 'unknown')} is missing required keys.")
 
@@ -264,8 +249,6 @@ def parse_llm_response(response_text):
     except (json.JSONDecodeError, ValueError) as e:
         print(f"\n❌ Error parsing JSON: {e}")
         return None  # Return None to handle it gracefully
-
-import pandas as pd
 
 def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xlsx"):
     """Generate effort and cost estimation Excel file with two sheets."""
@@ -301,46 +284,57 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
                 if subfeature_name.lower() == "testing":
                     continue
 
-                dev_days = subfeature["development_days"]
-                dev_buffer = dev_days * 0.2  # 20% buffer
-                test_days = 0.2 * (dev_days + dev_buffer)  # 20% of (Dev Days + Dev Buffer)
-                devops_days = subfeature["devops_days"]
+                # Get frontend and backend days directly from the LLM output
+                frontend_days = subfeature["frontend_days"]
+                backend_days = subfeature["backend_days"]
+                
+                # Calculate buffers (20% of respective efforts)
+                frontend_buffer = frontend_days * 0.2
+                backend_buffer = backend_days * 0.2
 
-                # Append effort estimation data
+                # Calculate testing time (15% of respective effort + buffer)
+                frontend_testing = (frontend_days + frontend_buffer) * 0.15
+                backend_testing = (backend_days + backend_buffer) * 0.15
+
+                # Append effort estimation data with new columns
                 effort_rows.append([
                     module_name, feature_name, subfeature_name,
-                    dev_days, dev_buffer, test_days, devops_days
+                    frontend_days, frontend_buffer, frontend_testing,
+                    backend_days, backend_buffer, backend_testing
                 ])
 
-                # Cost calculations
-                dev_cost = dev_days * pricing_model["Mid"]
-                test_cost = test_days * pricing_model["Junior"]
-                devops_cost = devops_days * pricing_model["Senior"]
+                # Cost calculations for cost sheet
+                frontend_cost = frontend_days * pricing_model["Mid"]
+                backend_cost = backend_days * pricing_model["Senior"]
 
                 # Append cost estimation data
                 cost_rows.append([
                     module_name, feature_name, subfeature_name,
-                    dev_days, dev_buffer, test_days, test_cost,
-                    devops_days, devops_cost
+                    frontend_days, frontend_buffer, frontend_cost,
+                    backend_days, backend_buffer, backend_cost,
                 ])
 
-    # Convert to DataFrames
+    # Convert to DataFrames with new column names
     effort_df = pd.DataFrame(effort_rows, columns=[
-        "Module", "Feature", "Subfeature", "Dev Days", "Dev Buffer", "Test Days", "DevOps Days"
+        "Module", "Feature", "Subfeature", 
+        "Frontend Effort", "Frontend Buffer", "Frontend Testing",
+        "Backend Effort", "Backend Buffer", "Backend Testing",
     ])
     
     cost_df = pd.DataFrame(cost_rows, columns=[
-        "Module", "Feature", "Subfeature", "Dev Days", "Dev Buffer", 
-        "Test Days", "Test Cost", "DevOps Days", "DevOps Cost"
+        "Module", "Feature", "Subfeature", 
+        "Frontend Days", "Frontend Buffer", "Frontend Cost",
+        "Backend Days", "Backend Buffer", "Backend Cost"
     ])
 
-    # Ensure the total row has the same number of columns
+    # Calculate totals
     total_effort_row = ["Total", "", "Total"] + effort_df.iloc[:, 3:].sum().tolist()
     total_cost_row = ["Total", "", "Total"] + cost_df.iloc[:, 3:].sum().tolist()
 
     # Append units row
-    unit_effort_row = ["", "", "Units", "days", "days", "days", "days"]
-    unit_cost_row = ["", "", "Units", "days", "days", "days", "INR", "days", "INR"]
+    unit_effort_row = ["", "", "Units", "days", "days", "days", "days", "days", "days"]    
+    # Make sure this has exactly 11 elements to match the 11 columns in cost_df
+    unit_cost_row = ["", "", "Units", "days", "days", "INR", "days", "days", "INR"]
 
     # Append total and unit rows
     effort_df.loc[len(effort_df)] = total_effort_row
@@ -355,7 +349,6 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
         cost_df.to_excel(writer, sheet_name="Cost Estimation", index=False)
 
     print(f"\n✅ Effort estimation Excel file generated: {output_excel}")
-
 
 if __name__ == "__main__":
     # Example JSON feature breakdown (same as your original example)
