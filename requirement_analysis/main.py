@@ -14,7 +14,7 @@ api_key = os.getenv("TOGETHER_API_KEY")
 client = Together(api_key=api_key)
 
 # Function to process requirement text and document
-def extract_requirements(requirement_text: str, url: str):
+def extract_requirements(requirement_text: str, url: str, tech_stack, platforms):
     """Extract requirements from a given requirement text and a Cloudinary PDF/DOCX URL."""
 
     # Determine the file type from the URL
@@ -24,6 +24,9 @@ def extract_requirements(requirement_text: str, url: str):
         file_type = "docx"
     else:
         raise ValueError("Unsupported file format. Only PDF and DOCX are supported.")
+    
+    tech_stack = tech_stack if tech_stack else "No preference"
+    platforms = platforms if platforms else "Any"
 
     # Download the file from Cloudinary
     try:
@@ -49,7 +52,7 @@ def extract_requirements(requirement_text: str, url: str):
         return {"error": "Failed to extract text from the document"}
 
     # Append requirement_text to extracted document text
-    combined_text = requirement_text + "\n\n" + extracted_text
+    combined_text = requirement_text + "\n\n" + extracted_text + "\n\n" + "Tech Stack preferences are: " + tech_stack + "\n\n" + "Platforms required: " + platforms
 
     # Send the text to the LLM function
     processed_requirements = extract_requirements_llm(combined_text)

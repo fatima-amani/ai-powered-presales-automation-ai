@@ -34,6 +34,9 @@ class Requirements(BaseModel):
     functionalRequirement: List[str]
     nonFunctionalRequirement: List[str]
     featureBreakdown: List[Module]
+    requirement_tech_stack: str = None  # Optional
+    requirement_platforms: str = None
+
 
 class TechComponent(BaseModel):
     name: str
@@ -52,6 +55,8 @@ class RequirementRequest(BaseModel):
 class ExtractRequest(BaseModel):
      requirement_text: str
      url: str
+     requirement_tech_stack: str = None  # Optional
+     requirement_platforms: str = None
  
 
 
@@ -62,9 +67,10 @@ async def get_response():
 @app.post("/extract")
 def extract(req: ExtractRequest):
      try:
-         result = extract_requirements(req.requirement_text, req.url)
+         result = extract_requirements(req.requirement_text, req.url, req.requirement_tech_stack, req.requirement_platforms)
          return {"message": "Extraction successful", "data": result}
      except Exception as e:
+         print(e)
          raise HTTPException(status_code=500, detail=str(e))
 
 
