@@ -73,7 +73,6 @@ def extract(req: ExtractRequest):
          print(e)
          raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.post("/tech-stack-recommendation")
 async def tech_stack_recommendation(req: Requirements):
     """

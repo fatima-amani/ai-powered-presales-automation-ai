@@ -14,32 +14,32 @@ api_key = os.getenv("TOGETHER_API_KEY")
 # Initialize Together client
 client = Together(api_key=api_key)
 
-# Pricing model (cost per day for each developer level)
+# Updated pricing model (hourly rates in INR)
 pricing_model = {
-    "Junior": 100,
-    "Mid": 200,
-    "Senior": 300
+    "Frontend": 15,
+    "Backend": 16,
+    "Testing": 12
 }
 
 # Define Pydantic models for structured output parsing
 class Subfeature(BaseModel):
     name: str = Field(description="Name of the subfeature")
-    development_days: float = Field(description="Number of days required for development")
-    testing_days: float = Field(description="Number of days required for testing")
-    devops_days: float = Field(description="Number of days required for DevOps")
+    frontend_days: float = Field(description="Number of days required for frontend development")
+    backend_days: float = Field(description="Number of days required for backend development")
 
 class Feature(BaseModel):
     name: str = Field(description="Name of the feature")
-    subfeatures: List[Subfeature] = Field(description="List of subfeatures with effort estimations")
+    subfeatures: Optional[List[Subfeature]] = Field(default_factory=list, description="List of subfeatures with effort estimations")
+    frontend_days: Optional[float] = Field(None, description="Direct frontend days if no subfeatures")
+    backend_days: Optional[float] = Field(None, description="Direct backend days if no subfeatures")
 
 class Module(BaseModel):
     module: str = Field(description="Name of the module")
     features: List[Feature] = Field(description="List of features in this module")
-    development_days: Optional[float] = Field(None, description="Total development days for the module")
-    testing_days: Optional[float] = Field(None, description="Total testing days for the module")
-    devops_days: Optional[float] = Field(None, description="Total DevOps days for the module")
+    frontend_days: Optional[float] = Field(None, description="Total frontend development days for the module")
+    backend_days: Optional[float] = Field(None, description="Total backend development days for the module")
 
-    @validator('development_days', 'testing_days', 'devops_days', pre=True, always=False)
+    @validator('frontend_days', 'backend_days', pre=True, always=False)
     def set_totals(cls, v, values):
         # This validator will be skipped during the parsing phase and only used for validation
         return v or 0.0
@@ -55,27 +55,27 @@ class EffortEstimation(BaseModel):
         }
 
 def estimate_effort(feature_breakdown):
-    """Estimate development, testing, and DevOps efforts using Mistral LLM with Langchain parser."""
+    """Estimate frontend and backend efforts using Mistral LLM with Langchain parser."""
     
     # Initialize the Pydantic parser
     parser = PydanticOutputParser(pydantic_object=EffortEstimation)
     
     # Load RAG context from file
     try:
-        with open("time_estimate_context.txt", "r", encoding="utf-8") as file:
+        with open("C:/Users/aitha/Desktop/PreSales Automation/ai-powered-presales-automation-ai/time_estimate_context.txt", "r", encoding="utf-8") as file:
             time_estimate_context = file.read()
     except FileNotFoundError:
         # Fallback if file doesn't exist
-        context = "No historical context available."
-        print("\n⚠️ rag_context.txt file not found. Proceeding without historical context.")
+        time_estimate_context = "No historical context available."
+        print("\n⚠️ time_estimate_context.txt file not found. Proceeding without historical context.")
     
     try:
-        with open("cost_estimate_context.txt", "r", encoding="utf-8") as file:
+        with open("C:/Users/aitha/Desktop/PreSales Automation/ai-powered-presales-automation-ai/cost_estimate_context.txt", "r", encoding="utf-8") as file:
             cost_estimate_context = file.read()
     except FileNotFoundError:
         # Fallback if file doesn't exist
-        context = "No historical context available."
-        print("\n⚠️ rag_context.txt file not found. Proceeding without historical context.")
+        cost_estimate_context = "No historical context available."
+        print("\n⚠️ cost_estimate_context.txt file not found. Proceeding without historical context.")
     
     # Modified format instructions for Pydantic v1
     format_instructions = """
@@ -119,42 +119,32 @@ def estimate_effort(feature_breakdown):
                                                     "description": "Name of the subfeature",
                                                     "type": "string"
                                                 },
-                                                "development_days": {
-                                                    "title": "Development Days",
-                                                    "description": "Number of days required for development",
+                                                "frontend_days": {
+                                                    "title": "Frontend Days",
+                                                    "description": "Number of days required for frontend development",
                                                     "type": "number"
                                                 },
-                                                "testing_days": {
-                                                    "title": "Testing Days",
-                                                    "description": "Number of days required for testing",
-                                                    "type": "number"
-                                                },
-                                                "devops_days": {
-                                                    "title": "Devops Days",
-                                                    "description": "Number of days required for DevOps",
+                                                "backend_days": {
+                                                    "title": "Backend Days",
+                                                    "description": "Number of days required for backend development",
                                                     "type": "number"
                                                 }
                                             },
-                                            "required": ["name", "development_days", "testing_days", "devops_days"]
+                                            "required": ["name", "frontend_days", "backend_days"]
                                         }
                                     }
                                 },
                                 "required": ["name", "subfeatures"]
                             }
                         },
-                        "development_days": {
-                            "title": "Development Days",
-                            "description": "Total development days for the module",
+                        "frontend_days": {
+                            "title": "Frontend Days",
+                            "description": "Total frontend development days for the module",
                             "type": "number"
                         },
-                        "testing_days": {
-                            "title": "Testing Days",
-                            "description": "Total testing days for the module",
-                            "type": "number"
-                        },
-                        "devops_days": {
-                            "title": "Devops Days",
-                            "description": "Total DevOps days for the module",
+                        "backend_days": {
+                            "title": "Backend Days",
+                            "description": "Total backend development days for the module",
                             "type": "number"
                         }
                     },
@@ -169,32 +159,23 @@ def estimate_effort(feature_breakdown):
     prompt = f"""
         Based on the given software features and subfeatures, estimate effort (in days) for each role:
         
-        - **Development**
-        - **Testing**
-        - **DevOps**
+        - **Frontend Development** (UI/UX implementation, client-side functionality)
+        - **Backend Development** (Server-side logic, APIs, databases)
         
-        The estimation should be **granular**, providing effort at the **subfeature level** while maintaining the module and feature hierarchy.
-
-        Use the following historical context to improve time estimation accuracy:
+        The estimation must follow this EXACT structure:
+        - Each module has a name and list of features
+        - Each feature has a name and list of subfeatures
+        - If a feature has direct effort values, still create a single subfeature with the same name
         
-        {time_estimate_context}
-
-        Use the following historical context to improve cost estimation accuracy:
-        
-        {cost_estimate_context}
-
         {format_instructions}
-
-        **Guidelines:**
-        - Assign **realistic effort estimates** based on standard development practices.
-        - Complex subfeatures (e.g., authentication, API integrations) should have **higher effort estimates**.
-        - Simple subfeatures (e.g., UI changes, minor configurations) should have **lower effort estimates**.
-        - Ensure all values are in whole or decimal numbers representing effort in **days**.
+        
+        # IMPORTANT: Every feature MUST have a subfeatures array, even if it only contains one item.
+        # Do NOT omit the subfeatures field for any feature.
 
         Features & Subfeatures:
         {feature_breakdown}
 
-        Provide the output in valid JSON format only, without any additional text.
+        Provide the output in valid JSON format only.
     """
 
     response = client.chat.completions.create(
@@ -207,10 +188,6 @@ def estimate_effort(feature_breakdown):
     )
 
     raw_output = response.choices[0].message.content.strip()
-
-    # Debugging: Print raw output
-    # print("\n Raw Response from LLM:")
-    # print(raw_output)
 
     try:
         # Parse using the Langchain parser
@@ -255,7 +232,7 @@ def parse_llm_response(response_text):
                     raise ValueError("Missing required keys in feature structure.")
 
                 for subfeature in feature["subfeatures"]:
-                    required_keys = {"name", "development_days", "testing_days", "devops_days"}
+                    required_keys = {"name", "frontend_days", "backend_days"}
                     if not required_keys.issubset(subfeature):
                         raise ValueError(f"Subfeature {subfeature.get('name', 'unknown')} is missing required keys.")
 
@@ -264,8 +241,58 @@ def parse_llm_response(response_text):
     except (json.JSONDecodeError, ValueError) as e:
         print(f"\n❌ Error parsing JSON: {e}")
         return None  # Return None to handle it gracefully
-
-import pandas as pd
+    
+def manual_parse_effort(raw_output):
+    """Last resort manual parsing of effort data with structural fixes."""
+    try:
+        # Preprocess to fix common issues
+        json_str = preprocess_llm_response(raw_output)
+        data = json.loads(json_str)
+        
+        # Check and fix module structure
+        if "effort_estimation" in data:
+            for i, module in enumerate(data["effort_estimation"]):
+                # Ensure features exists
+                if "features" not in module:
+                    module["features"] = []
+                
+                # Add missing subfeatures
+                for j, feature in enumerate(module["features"]):
+                    if "subfeatures" not in feature:
+                        if "frontend_days" in feature:
+                            # Create subfeature from feature itself
+                            feature["subfeatures"] = [{
+                                "name": feature.get("name", "Unknown"),
+                                "frontend_days": feature.get("frontend_days", 0),
+                                "backend_days": feature.get("backend_days", 0)
+                            }]
+        
+        return data
+    except Exception as e:
+        print(f"Manual parsing failed: {e}")
+        return None
+    
+def preprocess_llm_response(raw_output):
+    """Clean and fix common JSON formatting issues from LLM responses."""
+    # Try to extract just the JSON part
+    json_start = raw_output.find('{')
+    json_end = raw_output.rfind('}') + 1
+    
+    if json_start >= 0 and json_end > json_start:
+        json_str = raw_output[json_start:json_end]
+        
+        # Fix for features without subfeatures
+        import re
+        pattern = r'"features":\s*\[\s*{\s*"name":\s*"([^"]+)",\s*"frontend_days":'
+        replacement = r'"features": [{"name": "\1", "subfeatures": [{"name": "\1", "frontend_days":'
+        json_str = re.sub(pattern, replacement, json_str)
+        
+        # Fix for unclosed arrays or missing commas
+        json_str = json_str.replace('"}]"}', '"}]}')
+        json_str = json_str.replace('"Testing"}', '"Testing"}]')
+        
+        return json_str
+    return raw_output
 
 def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xlsx"):
     """Generate effort and cost estimation Excel file with two sheets."""
@@ -290,6 +317,11 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
     effort_rows = []
     cost_rows = []
     
+    # For collecting data for cost summary
+    frontend_total_days = 0
+    backend_total_days = 0
+    testing_total_days = 0
+    
     for module in effort_data["effort_estimation"]:
         module_name = module["module"]
         for feature in module["features"]:
@@ -301,46 +333,61 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
                 if subfeature_name.lower() == "testing":
                     continue
 
-                dev_days = subfeature["development_days"]
-                dev_buffer = dev_days * 0.2  # 20% buffer
-                test_days = 0.2 * (dev_days + dev_buffer)  # 20% of (Dev Days + Dev Buffer)
-                devops_days = subfeature["devops_days"]
+                # Get frontend and backend days directly from the LLM output
+                frontend_days = subfeature["frontend_days"]
+                backend_days = subfeature["backend_days"]
+                
+                # Calculate buffers (20% of respective efforts)
+                frontend_buffer = frontend_days * 0.2
+                backend_buffer = backend_days * 0.2
 
-                # Append effort estimation data
+                # Calculate testing time (15% of respective effort + buffer)
+                frontend_testing = (frontend_days + frontend_buffer) * 0.15
+                backend_testing = (backend_days + backend_buffer) * 0.15
+
+                # Append effort estimation data with new columns
                 effort_rows.append([
                     module_name, feature_name, subfeature_name,
-                    dev_days, dev_buffer, test_days, devops_days
+                    frontend_days, frontend_buffer, frontend_testing,
+                    backend_days, backend_buffer, backend_testing
                 ])
 
-                # Cost calculations
-                dev_cost = dev_days * pricing_model["Mid"]
-                test_cost = test_days * pricing_model["Junior"]
-                devops_cost = devops_days * pricing_model["Senior"]
+                # Update total days for cost summary
+                frontend_total_days += (frontend_days + frontend_buffer) * 1.1
+                backend_total_days += (backend_days + backend_buffer) * 1.1
+                testing_total_days += frontend_testing * 1.1  # Using frontend testing as requested
+
+                # Original cost calculations (kept for compatibility)
+                frontend_cost = frontend_days * pricing_model["Frontend"] * 8
+                backend_cost = backend_days * pricing_model["Backend"] * 8
 
                 # Append cost estimation data
                 cost_rows.append([
                     module_name, feature_name, subfeature_name,
-                    dev_days, dev_buffer, test_days, test_cost,
-                    devops_days, devops_cost
+                    frontend_days, frontend_buffer, frontend_cost,
+                    backend_days, backend_buffer, backend_cost,
                 ])
 
-    # Convert to DataFrames
+    # Convert to DataFrames with new column names
     effort_df = pd.DataFrame(effort_rows, columns=[
-        "Module", "Feature", "Subfeature", "Dev Days", "Dev Buffer", "Test Days", "DevOps Days"
+        "Module", "Feature", "Subfeature", 
+        "Frontend Effort", "Frontend Buffer", "Frontend Testing",
+        "Backend Effort", "Backend Buffer", "Backend Testing",
     ])
     
     cost_df = pd.DataFrame(cost_rows, columns=[
-        "Module", "Feature", "Subfeature", "Dev Days", "Dev Buffer", 
-        "Test Days", "Test Cost", "DevOps Days", "DevOps Cost"
+        "Module", "Feature", "Subfeature", 
+        "Frontend Days", "Frontend Buffer", "Frontend Cost",
+        "Backend Days", "Backend Buffer", "Backend Cost"
     ])
 
-    # Ensure the total row has the same number of columns
+    # Calculate totals
     total_effort_row = ["Total", "", "Total"] + effort_df.iloc[:, 3:].sum().tolist()
     total_cost_row = ["Total", "", "Total"] + cost_df.iloc[:, 3:].sum().tolist()
 
     # Append units row
-    unit_effort_row = ["", "", "Units", "days", "days", "days", "days"]
-    unit_cost_row = ["", "", "Units", "days", "days", "days", "INR", "days", "INR"]
+    unit_effort_row = ["", "", "Units", "days", "days", "days", "days", "days", "days"]    
+    unit_cost_row = ["", "", "Units", "days", "days", "INR", "days", "days", "INR"]
 
     # Append total and unit rows
     effort_df.loc[len(effort_df)] = total_effort_row
@@ -349,13 +396,53 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
     cost_df.loc[len(cost_df)] = total_cost_row
     cost_df.loc[len(cost_df)] = unit_cost_row
 
-    # Save to Excel with two sheets
+    # Create new cost summary format as per the screenshot
+    cost_summary_data = [
+        ["Frontend", frontend_total_days, pricing_model["Frontend"], frontend_total_days * 8 * pricing_model["Frontend"]],
+        ["Backend", backend_total_days, pricing_model["Backend"], backend_total_days * 8 * pricing_model["Backend"]],
+        ["Testing", testing_total_days, pricing_model["Testing"], testing_total_days * 8 * pricing_model["Testing"]]
+    ]
+    
+    # Calculate total cost
+    total_cost = sum(row[3] for row in cost_summary_data)
+    cost_summary_data.append(["Total", "", "", total_cost])
+    
+    # Create DataFrame for cost summary
+    cost_summary_df = pd.DataFrame(cost_summary_data, columns=[
+        "Item", "Effort in Days", "Rate per hour (IN INR)", "Pricing"
+    ])
+    
+    # Format the pricing column with Indian Rupee symbol
+    cost_summary_df["Pricing"] = cost_summary_df["Pricing"].apply(lambda x: f"₹{x:,.2f}" if isinstance(x, (int, float)) else x)
+    
+    # Save to Excel with sheets
     with pd.ExcelWriter(output_excel, engine="xlsxwriter") as writer:
         effort_df.to_excel(writer, sheet_name="Effort Estimation", index=False)
-        cost_df.to_excel(writer, sheet_name="Cost Estimation", index=False)
+        # cost_df.to_excel(writer, sheet_name="Cost Estimation", index=False)
+        cost_summary_df.to_excel(writer, sheet_name="Cost Summary", index=False)
+        
+        # Get the xlsxwriter workbook and worksheet objects
+        workbook = writer.book
+        worksheet = writer.sheets["Cost Summary"]
+        
+        # Define formats
+        header_format = workbook.add_format({
+            'bold': True,
+            'text_wrap': True,
+            'valign': 'top',
+            'border': 1
+        })
+        
+        # Apply formats to headers
+        for col_num, value in enumerate(cost_summary_df.columns.values):
+            worksheet.write(0, col_num, value, header_format)
+        
+        # Auto-fit columns
+        for i, col in enumerate(cost_summary_df.columns):
+            column_width = max(cost_summary_df[col].astype(str).map(len).max(), len(col))
+            worksheet.set_column(i, i, column_width + 2)
 
-    print(f"\n✅ Effort estimation Excel file generated: {output_excel}")
-
+    print(f"\n✅ Cost estimation Excel file generated with new Cost Summary sheet: {output_excel}")
 
 if __name__ == "__main__":
     # Example JSON feature breakdown (same as your original example)
