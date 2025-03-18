@@ -4,6 +4,14 @@ import json
 import time
 from together import Together
 from dotenv import load_dotenv
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 # Load API key from .env file
 load_dotenv()
@@ -12,79 +20,105 @@ api_key = os.getenv("TOGETHER_API_KEY")
 # Initialize Together client
 client = Together(api_key=api_key)
 
-def generate_wireframe(feature_breakdown, max_retries=3):
-    prompt = f"""
-        Based on the following feature breakdown, generate a JSON structure for a wireframe.
+def generate_prompt(feature_breakdown):
+    """Generates a natural language description of the feature breakdown."""
+    prompt = (
+        "Convert the following JSON feature breakdown into a natural language description, "
+        "keeping it concise and **strictly** under 1000 characters:\n\n"
+        f"{json.dumps(feature_breakdown, indent=2)}"
+    )
 
-        Feature Breakdown:
-        {json.dumps(feature_breakdown, indent=2)}
+    return prompt
 
-        The output should be a JSON object with "pages", each containing "name" and "elements". Each element should have:
-        - "type" (e.g., textbox, button, header, chart)
-        - "label" (a user-friendly name)
-        - "position" with "x" and "y" coordinates
-        - Optional size attributes like width and height if relevant.
+def get_llm_response(prompt):
+    """Fetches the response from an LLM (like OpenAI GPT) based on the feature breakdown."""
+    response = client.chat.completions.create(
+        model="mistralai/Mistral-7B-Instruct-v0.3",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=2500,
+        temperature=0.77,
+        top_p=0.7,
+        top_k=50,
+        repetition_penalty=1,
+        stop=["</s>"],
+    )
 
-        Return only valid JSON with no explanations or additional text.
+    return response.choices[0].message.content
 
-        Example JSON format:
-        {{
-        "pages": [
-            {{
-            "name": "Login Page",
-            "elements": [
-                {{
-                "type": "textbox",
-                "label": "Username",
-                "position": {{ "x": 50, "y": 100 }}
-                }},
-                {{
-                "type": "textbox",
-                "label": "Password",
-                "position": {{ "x": 50, "y": 150 }}
-                }},
-                {{
-                "type": "button",
-                "label": "Login",
-                "position": {{ "x": 50, "y": 200 }}
-                }}
-            ]
-            }}
-        ]
-        }}
-    """
+def selenium_pipeline(email, password, feature_breakdown):
+    """Executes the Selenium automation pipeline."""
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service)
+    
+    # Step 1: Navigate to login page
+    driver.get("https://www.usegalileo.ai/login")
+    time.sleep(10)
+    
+    # Step 2 & 3: Enter credentials and log in
+    email_box = driver.find_element(By.TAG_NAME, "input")
+    email_box.click()
+    email_box.send_keys(email)
+    email_box.send_keys(Keys.ENTER)
+    time.sleep(2)
+    
+    password_box = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, "//input[@type='password']"))
+    )
+    password_box.send_keys(password)
+    password_box.send_keys(Keys.ENTER)
+    time.sleep(10)
+    
+    # Step 4: Navigate to create page and interact with UI
+    driver.get("https://www.usegalileo.ai/create")
+    time.sleep(5)
 
-    attempt = 0
-    while attempt < max_retries:
-        try:
-            response = client.chat.completions.create(
-                model="mistralai/Mistral-7B-Instruct-v0.3",
-                messages=[{"role": "user", "content": prompt}],
-                max_tokens=2500,
-                temperature=0.77,
-                top_p=0.7,
-                top_k=50,
-                repetition_penalty=1,
-                stop=["</s>"],
-            )
+    driver.find_element(By.ID, "start-new-design").click()
+    time.sleep(2)
+    
+    # # Step 5: Select Web option and input prompt
+    driver.find_element(By.XPATH, "//html/body/div[1]/main/div[2]/div/div[2]/div/div[2]/div/div/footer/div/div/div[2]/div[1]/div/button[2]").click()
+    time.sleep(2)
+    
+    # # Generate LLM-based prompt
+    llm_prompt = generate_prompt(feature_breakdown)
+    llm_response = get_llm_response(llm_prompt)
 
-            llm_output = response.choices[0].message.content
+    # Wait for the textbox to appear
+    textbox = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//div[@role='textbox']"))
+    )
 
-            # Extract only the JSON using regex
-            json_match = re.search(r"\{[\s\S]*\}", llm_output)
-            if json_match:
-                wireframe_json = json_match.group(0)
-                return json.loads(wireframe_json)  # Convert to dict
+    # Click the textbox to activate it
+    textbox.click()
+    time.sleep(10)
 
-        except (json.JSONDecodeError, KeyError) as e:
-            print(f"Attempt {attempt + 1}: Invalid response from LLM, retrying... ({e})")
-        
-        attempt += 1
-        time.sleep(2)  # Small delay before retrying
+    print(llm_response)
+    
+    driver.execute_script("arguments[0].innerText = arguments[1];", textbox, llm_response)
+    textbox.send_keys(Keys.SPACE)
+    textbox.send_keys(Keys.ENTER)
+    
+    # # Step 6: Wait for UI to generate
+    time.sleep(60)
+    
+    # Step 7: Extract image links
+    image_elements = driver.find_elements(By.XPATH, "//img[contains(@srcset, 'https://cdn.usegalileo.ai/')]")
 
-    raise ValueError("Failed to generate valid wireframe JSON after 3 attempts.")
+    img_links = []
 
-# Example Input (Feature Breakdown)
+    for img in image_elements:
+        srcset = img.get_attribute("srcset")
+        if srcset:
+            # Extract URLs from srcset that contain 'cdn.usegalileo.ai'
+            urls = [entry.split(" ")[0] for entry in srcset.split(",") if "cdn.usegalileo.ai" in entry]
+            img_links.extend(urls)
+
+    # Print all extracted image links
+    print(img_links)
+
+    return img_links
+
+# Example usage
 feature_breakdown = {
     "feature_breakdown": [
         {
@@ -237,9 +271,7 @@ feature_breakdown = {
         }
     ]
 }
-
-# try:
-#     wireframe = generate_wireframe(feature_breakdown)
-#     print(json.dumps(wireframe, indent=2))
-# except ValueError as e:
-#     print("Error:", str(e))
+email = os.getenv("EMAIL")
+password = os.getenv("PASSWORD")
+image_links = selenium_pipeline(email, password, feature_breakdown)
+print(image_links)
