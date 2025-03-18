@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from together import Together
 import os
 import requests
-from extract_from_doc import extract_text_from_doc, extract_text_from_pdf
+from .extract_from_doc import extract_text_from_doc, extract_text_from_pdf
 
 # Load API key from .env file
 load_dotenv()

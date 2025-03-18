@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI, Form, HTTPException, Response
+from fastapi import FastAPI, Form, HTTPException, Response, Body
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -7,8 +7,10 @@ from requirement_analysis.main import extract_requirements
 from architecture_and_tech_stack.main import get_tech_stack_recommendation, generate_architecture_diagram
 from time_and_effort_estimation.main import generate_effort_excel
 from business_analyst.main import get_user_persona, categorize_features
-from typing import List, Dict
+from wireframe_generator.main import generate_wireframe
+from typing import List, Dict,Optional
 import json
+
 
 app = FastAPI()
 
@@ -57,6 +59,20 @@ class ExtractRequest(BaseModel):
      url: str
      requirement_tech_stack: str = None  # Optional
      requirement_platforms: str = None
+
+class SubFeature(BaseModel):
+    name: str
+    description: str
+
+class ModuleFeature(BaseModel):
+    name: str
+    description: str
+    subfeatures: Optional[List[SubFeature]] = []
+
+class Module(BaseModel):
+    module: str
+    features: List[ModuleFeature]
+
  
 
 
@@ -83,7 +99,7 @@ async def tech_stack_recommendation(req: Requirements):
         raise HTTPException(status_code=400, detail="Requirements are missing in the request body.")
 
     try:
-        response = get_tech_stack_recommendation(req.dict())
+        response = get_tech_stack_recommendation(req.dict(), req.requirement_tech_stack)
         return response
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
@@ -140,19 +156,25 @@ async def generate_user_persona(request: RequirementRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/generate-wireframe")
-async def generate_wireframe(req: Requirements):
+async def generate_wireframe_endpoint(featureBreakdown: List[Module] = Body(..., embed=True)):
     """
-    Accepts a detailed requirement request body, validates it,
-    and returns a tech stack recommendation.
+    Accepts a detailed feature breakdown and returns a wireframe generation result.
     """
-    if not req:
-        raise HTTPException(status_code=400, detail="Requirements are missing in the request body.")
+    if not featureBreakdown:
+        raise HTTPException(status_code=400, detail="Feature breakdown is missing.")
 
     try:
-        response ={"message" : "Wireframe generation is under maintenance"}
-        return response
+        # Convert to dict if generate_wireframe expects JSON-like dict
+        feature_breakdown_dict = [module.dict() for module in featureBreakdown]
+        wireframe_data = generate_wireframe(feature_breakdown_dict)
+
+        return {
+            "message": "Wireframe generation successful",
+            "data": wireframe_data
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
+
 
 if __name__ == "__main__":
     import uvicorn

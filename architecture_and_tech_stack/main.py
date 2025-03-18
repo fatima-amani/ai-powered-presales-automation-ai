@@ -14,12 +14,15 @@ api_key = os.getenv("TOGETHER_API_KEY")
 # Initialize Together client
 client = Together(api_key=api_key)
 
-def get_tech_stack_recommendation(requirements_json):
+def get_tech_stack_recommendation(requirements_json,requirement_tech_stack):
     prompt = f"""
         You are an AI expert in software architecture and technology stacks. Given the following project requirements in JSON format, recommend a suitable tech stack in JSON format.
 
         Requirements:
         {json.dumps(requirements_json, indent=2)}
+
+        Tech Stack Preference:
+        {json.dumps(requirement_tech_stack, indent=2)}
 
         Provide output in the following format:
         {{
