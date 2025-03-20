@@ -7,7 +7,7 @@ from requirement_analysis.main import extract_requirements
 from architecture_and_tech_stack.main import get_tech_stack_recommendation, generate_architecture_diagram
 from time_and_effort_estimation.main import generate_effort_excel
 from business_analyst.main import get_user_persona, categorize_features
-from wireframe_generator.main import generate_wireframe
+from wireframe_generator.main import selenium_pipeline
 from typing import List, Dict,Optional
 import json
 
@@ -38,6 +38,7 @@ class Requirements(BaseModel):
     featureBreakdown: List[Module]
     requirement_tech_stack: str = None  # Optional
     requirement_platforms: str = None
+    
 
 
 class TechComponent(BaseModel):
@@ -166,7 +167,7 @@ async def generate_wireframe_endpoint(featureBreakdown: List[Module] = Body(...,
     try:
         # Convert to dict if generate_wireframe expects JSON-like dict
         feature_breakdown_dict = [module.dict() for module in featureBreakdown]
-        wireframe_data = generate_wireframe(feature_breakdown_dict)
+        wireframe_data = selenium_pipeline(feature_breakdown_dict)
 
         return {
             "message": "Wireframe generation successful",

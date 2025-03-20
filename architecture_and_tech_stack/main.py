@@ -18,10 +18,13 @@ def get_tech_stack_recommendation(requirements_json,requirement_tech_stack):
     prompt = f"""
         You are an AI expert in software architecture and technology stacks. Given the following project requirements in JSON format, recommend a suitable tech stack in JSON format.
 
+        
+        STRICTLY adhere to the provided Tech Stack Preferences. If a technology preference is mentioned, prioritize and include it. Only suggest alternatives if no preference is explicitly stated for a particular layer.
+
         Requirements:
         {json.dumps(requirements_json, indent=2)}
 
-        Tech Stack Preference:
+        Tech Stack Preference: 
         {json.dumps(requirement_tech_stack, indent=2)}
 
         Provide output in the following format:
@@ -61,6 +64,7 @@ def get_tech_stack_recommendation(requirements_json,requirement_tech_stack):
         Ensure the output is in valid JSON format only, without any additional text.
         """
 
+    print(requirement_tech_stack)
     response = client.chat.completions.create(
         model="mistralai/Mistral-7B-Instruct-v0.3",
         messages=[{"role": "user", "content": prompt}],

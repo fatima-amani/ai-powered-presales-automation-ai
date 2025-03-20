@@ -23,10 +23,13 @@ client = Together(api_key=api_key)
 def generate_prompt(feature_breakdown):
     """Generates a natural language description of the feature breakdown."""
     prompt = (
-        "Convert the following JSON feature breakdown into a natural language description, "
-        "keeping it concise and **strictly** under 1000 characters:\n\n"
+        "Given the following JSON feature breakdown, generate a concise natural language description "
+        "focusing **only on Website features**. "
+        "Completely ignore any content related to Mobile or Apps, and exclude all mentions of mobile-specific tabs or features. "
+        "The description must be strictly under 1000 characters, and avoid repeating similar sections:\n\n"
         f"{json.dumps(feature_breakdown, indent=2)}"
     )
+
 
     return prompt
 
@@ -45,8 +48,12 @@ def get_llm_response(prompt):
 
     return response.choices[0].message.content
 
-def selenium_pipeline(email, password, feature_breakdown):
+def selenium_pipeline(feature_breakdown):
     """Executes the Selenium automation pipeline."""
+
+    email = os.getenv("EMAIL")
+    password = os.getenv("PASSWORD")
+
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service)
     
@@ -100,9 +107,19 @@ def selenium_pipeline(email, password, feature_breakdown):
     
     # # Step 6: Wait for UI to generate
     time.sleep(60)
+
+    textbox = driver.find_element(By.CSS_SELECTOR, "div[role='textbox']")
+    textbox.click()
+    textbox.send_keys("Yes, generate it")
+    textbox.send_keys(Keys.ENTER)
+    # driver.execute_script("arguments[0].innerText = arguments[1];", textbox, "yes generate it")
+    # textbox.send_keys(Keys.SPACE)
+    # textbox.send_keys(Keys.ENTER)
+
+    time.sleep(60)
     
     # Step 7: Extract image links
-    image_elements = driver.find_elements(By.XPATH, "//img[contains(@srcset, 'https://cdn.usegalileo.ai/')]")
+    image_elements = driver.find_elements(By.XPATH, "//img[contains(@src, 'https://cdn.usegalileo.ai/') or contains(@srcset, 'https://cdn.usegalileo.ai/')]")
 
     img_links = []
 
@@ -119,159 +136,160 @@ def selenium_pipeline(email, password, feature_breakdown):
     return img_links
 
 # Example usage
-feature_breakdown = {
-    "feature_breakdown": [
-        {
-            "module": "Website",
-            "features": [
-                {
-                    "name": "Homepage",
-                    "description": "Displays the main landing page of the website",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Match Fixtures",
-                    "description": "Lists upcoming or currently in play fixtures",
-                    "subfeatures": [
-                        {
-                            "name": "Fixture List",
-                            "description": "Displays a list of fixtures with match details"
-                        },
-                        {
-                            "name": "Buy Match Tickets",
-                            "description": "Allows users to purchase match tickets"
-                        },
-                        {
-                            "name": "Match Centre",
-                            "description": "Displays real-time data (if available) for live match stats"
-                        }
-                    ]
-                },
-                {
-                    "name": "Match Results",
-                    "description": "Lists completed matches",
-                    "subfeatures": [
-                        {
-                            "name": "Result List",
-                            "description": "Displays a list of results with match details"
-                        }
-                    ]
-                },
-                {
-                    "name": "News Listing",
-                    "description": "Displays a list of news articles",
-                    "subfeatures": [
-                        {
-                            "name": "News Article",
-                            "description": "Displays a single news article with embedded polls"
-                        }
-                    ]
-                },
-                {
-                    "name": "League Tables",
-                    "description": "Displays the current league table for the league in which the club\u2019s first team is playing",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Player Listing",
-                    "description": "Lists the players that make up the squad for the club\u2019s first team",
-                    "subfeatures": [
-                        {
-                            "name": "Player Profile",
-                            "description": "Displays further details for each player"
-                        }
-                    ]
-                },
-                {
-                    "name": "Video Hub",
-                    "description": "Acts as a video hub allowing fans access to key curated collections of video feeds",
-                    "subfeatures": []
-                }
-            ]
-        },
-        {
-            "module": "Apps",
-            "features": [
-                {
-                    "name": "Latest Tab",
-                    "description": "Provides an aggregated collection of the latest news content from the club",
-                    "subfeatures": []
-                },
-                {
-                    "name": "News",
-                    "description": "Displays news articles with imagery, written content, and video content",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Polls and Quizzes",
-                    "description": "Displays polls and quizzes created by admins",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Matches Tab",
-                    "description": "Provides a list of past results and upcoming fixtures for the current season",
-                    "subfeatures": []
-                },
-                {
-                    "name": "League Tables Full List",
-                    "description": "Presents the current league table for the league in which the club\u2019s first team is playing",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Live Scores Full List",
-                    "description": "Lists all the live scores for the relevant match day",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Squad Full List (including Player Profiles)",
-                    "description": "Provides a list of players that make up the squad for the club\u2019s first team",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Player Profile",
-                    "description": "Displays further details for each player",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Match Centre",
-                    "description": "Contains any specific match-related content including, but not limited to, Commentary and Statistics",       
-                    "subfeatures": []
-                },
-                {
-                    "name": "Club TV tab",
-                    "description": "Showcases video content presented via a latest feed of all latest videos",
-                    "subfeatures": []
-                },
-                {
-                    "name": "More Tab",
-                    "description": "Houses quick links to Live Scores, League Tables, Fixtures, Quizzes, User Account, Stadium Info, Supporters Guides, HR, Hiring, Recruitment and Job Opportunities and Settings and will sit on the main tab bar navigation",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Account",
-                    "description": "Houses information for in-app ticketing and previous predictions",
-                    "subfeatures": []
-                },
-                {
-                    "name": "Settings",
-                    "description": "Collects a number of administration and configuration features",
-                    "subfeatures": []
-                },
-                {
-                    "name": "iOS Widgets",
-                    "description": "Allows fans to stay on top of all things related to the club from their Home Screens",
-                    "subfeatures": []
-                },
-                {
-                    "name": "iOS Live Activities",
-                    "description": "Provides real-time information at a glance without needing to unlock the app",
-                    "subfeatures": []
-                }
-            ]
-        }
-    ]
-}
-email = os.getenv("EMAIL")
-password = os.getenv("PASSWORD")
-image_links = selenium_pipeline(email, password, feature_breakdown)
-print(image_links)
+
+if __name__ == "__main__":
+    feature_breakdown = {
+        "feature_breakdown": [
+            {
+                "module": "Website",
+                "features": [
+                    {
+                        "name": "Homepage",
+                        "description": "Displays the main landing page of the website",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Match Fixtures",
+                        "description": "Lists upcoming or currently in play fixtures",
+                        "subfeatures": [
+                            {
+                                "name": "Fixture List",
+                                "description": "Displays a list of fixtures with match details"
+                            },
+                            {
+                                "name": "Buy Match Tickets",
+                                "description": "Allows users to purchase match tickets"
+                            },
+                            {
+                                "name": "Match Centre",
+                                "description": "Displays real-time data (if available) for live match stats"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Match Results",
+                        "description": "Lists completed matches",
+                        "subfeatures": [
+                            {
+                                "name": "Result List",
+                                "description": "Displays a list of results with match details"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "News Listing",
+                        "description": "Displays a list of news articles",
+                        "subfeatures": [
+                            {
+                                "name": "News Article",
+                                "description": "Displays a single news article with embedded polls"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "League Tables",
+                        "description": "Displays the current league table for the league in which the club\u2019s first team is playing",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Player Listing",
+                        "description": "Lists the players that make up the squad for the club\u2019s first team",
+                        "subfeatures": [
+                            {
+                                "name": "Player Profile",
+                                "description": "Displays further details for each player"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Video Hub",
+                        "description": "Acts as a video hub allowing fans access to key curated collections of video feeds",
+                        "subfeatures": []
+                    }
+                ]
+            },
+            {
+                "module": "Apps",
+                "features": [
+                    {
+                        "name": "Latest Tab",
+                        "description": "Provides an aggregated collection of the latest news content from the club",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "News",
+                        "description": "Displays news articles with imagery, written content, and video content",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Polls and Quizzes",
+                        "description": "Displays polls and quizzes created by admins",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Matches Tab",
+                        "description": "Provides a list of past results and upcoming fixtures for the current season",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "League Tables Full List",
+                        "description": "Presents the current league table for the league in which the club\u2019s first team is playing",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Live Scores Full List",
+                        "description": "Lists all the live scores for the relevant match day",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Squad Full List (including Player Profiles)",
+                        "description": "Provides a list of players that make up the squad for the club\u2019s first team",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Player Profile",
+                        "description": "Displays further details for each player",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Match Centre",
+                        "description": "Contains any specific match-related content including, but not limited to, Commentary and Statistics",       
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Club TV tab",
+                        "description": "Showcases video content presented via a latest feed of all latest videos",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "More Tab",
+                        "description": "Houses quick links to Live Scores, League Tables, Fixtures, Quizzes, User Account, Stadium Info, Supporters Guides, HR, Hiring, Recruitment and Job Opportunities and Settings and will sit on the main tab bar navigation",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Account",
+                        "description": "Houses information for in-app ticketing and previous predictions",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "Settings",
+                        "description": "Collects a number of administration and configuration features",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "iOS Widgets",
+                        "description": "Allows fans to stay on top of all things related to the club from their Home Screens",
+                        "subfeatures": []
+                    },
+                    {
+                        "name": "iOS Live Activities",
+                        "description": "Provides real-time information at a glance without needing to unlock the app",
+                        "subfeatures": []
+                    }
+                ]
+            }
+        ]
+    }
+    
+    image_links = selenium_pipeline(feature_breakdown)
+    print(image_links)
