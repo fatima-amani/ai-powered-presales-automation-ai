@@ -338,12 +338,12 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
                 backend_days = subfeature["backend_days"]
                 
                 # Calculate buffers (20% of respective efforts)
-                frontend_buffer = frontend_days * 0.2
-                backend_buffer = backend_days * 0.2
+                frontend_buffer = round(frontend_days * 0.2,2)
+                backend_buffer = round(backend_days * 0.2,2)
 
                 # Calculate testing time (15% of respective effort + buffer)
-                frontend_testing = (frontend_days + frontend_buffer) * 0.15
-                backend_testing = (backend_days + backend_buffer) * 0.15
+                frontend_testing = round((frontend_days + frontend_buffer) * 0.15,2)
+                backend_testing = round((backend_days + backend_buffer) * 0.15,2)
 
                 # Append effort estimation data with new columns
                 effort_rows.append([
@@ -353,13 +353,13 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
                 ])
 
                 # Update total days for cost summary
-                frontend_total_days += (frontend_days + frontend_buffer) * 1.1
-                backend_total_days += (backend_days + backend_buffer) * 1.1
-                testing_total_days += frontend_testing * 1.1  # Using frontend testing as requested
+                frontend_total_days += round((frontend_days + frontend_buffer) * 1.1,2)
+                backend_total_days += round((backend_days + backend_buffer) * 1.1,2)
+                testing_total_days += round(frontend_testing * 1.1, 2)  # Using frontend testing as requested
 
                 # Original cost calculations (kept for compatibility)
-                frontend_cost = frontend_days * pricing_model["Frontend"] * 8
-                backend_cost = backend_days * pricing_model["Backend"] * 8
+                frontend_cost = round(frontend_days * pricing_model["Frontend"] * 8,2)
+                backend_cost = round(backend_days * pricing_model["Backend"] * 8,2)
 
                 # Append cost estimation data
                 cost_rows.append([
@@ -396,11 +396,15 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
     cost_df.loc[len(cost_df)] = total_cost_row
     cost_df.loc[len(cost_df)] = unit_cost_row
 
+    # Round numerical values to 2 decimal places
+    # effort_df.iloc[:, 3:] = effort_df.iloc[:, 3:].round(2)
+    # cost_df.iloc[:, 1:3] = cost_df.iloc[:, 1:3].round(2)
+
     # Create new cost summary format as per the screenshot
     cost_summary_data = [
-        ["Frontend", frontend_total_days, pricing_model["Frontend"], frontend_total_days * 8 * pricing_model["Frontend"]],
-        ["Backend", backend_total_days, pricing_model["Backend"], backend_total_days * 8 * pricing_model["Backend"]],
-        ["Testing", testing_total_days, pricing_model["Testing"], testing_total_days * 8 * pricing_model["Testing"]]
+        ["Frontend", frontend_total_days, pricing_model["Frontend"], round(frontend_total_days * 8 * pricing_model["Frontend"],2)],
+        ["Backend", backend_total_days, pricing_model["Backend"], round(backend_total_days * 8 * pricing_model["Backend"],2)],
+        ["Testing", testing_total_days, pricing_model["Testing"], round(testing_total_days * 8 * pricing_model["Testing"],2)]
     ]
     
     # Calculate total cost
