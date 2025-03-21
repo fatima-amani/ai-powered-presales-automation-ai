@@ -79,7 +79,7 @@ class Module(BaseModel):
 
 @app.get("/")
 async def get_response():
-    return "hello world"
+    return "hello world!!"
 
 @app.post("/extract")
 def extract(req: ExtractRequest):

@@ -132,6 +132,7 @@ def selenium_pipeline(feature_breakdown):
 
     # Print all extracted image links
     print(img_links)
+    driver.quit()
 
     return img_links
 
@@ -270,7 +271,7 @@ if __name__ == "__main__":
                         "name": "Account",
                         "description": "Houses information for in-app ticketing and previous predictions",
                         "subfeatures": []
-                    },
+                    }, 
                     {
                         "name": "Settings",
                         "description": "Collects a number of administration and configuration features",
@@ -291,5 +292,5 @@ if __name__ == "__main__":
         ]
     }
     
-    image_links = selenium_pipeline(feature_breakdown)
-    print(image_links)
+    # image_links = selenium_pipeline(feature_breakdown)
+    # print(image_links)
