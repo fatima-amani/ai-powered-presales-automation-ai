@@ -59,7 +59,7 @@ def selenium_pipeline(feature_breakdown):
     
     # Step 1: Navigate to login page
     driver.get("https://www.usegalileo.ai/login")
-    time.sleep(10)
+    time.sleep(5)
     
     # Step 2 & 3: Enter credentials and log in
     email_box = driver.find_element(By.TAG_NAME, "input")
@@ -73,7 +73,7 @@ def selenium_pipeline(feature_breakdown):
     )
     password_box.send_keys(password)
     password_box.send_keys(Keys.ENTER)
-    time.sleep(10)
+    time.sleep(5)
     
     # Step 4: Navigate to create page and interact with UI
     driver.get("https://www.usegalileo.ai/create")
@@ -99,7 +99,7 @@ def selenium_pipeline(feature_breakdown):
     textbox.click()
     time.sleep(10)
 
-    print(llm_response)
+    # print(llm_response)
     
     driver.execute_script("arguments[0].innerText = arguments[1];", textbox, llm_response)
     textbox.send_keys(Keys.SPACE)

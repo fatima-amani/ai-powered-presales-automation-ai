@@ -62,7 +62,7 @@ def estimate_effort(feature_breakdown):
     
     # Load RAG context from file
     try:
-        with open("C:/Users/aitha/Desktop/PreSales Automation/ai-powered-presales-automation-ai/time_estimate_context.txt", "r", encoding="utf-8") as file:
+        with open("time_estimate_context.txt", "r", encoding="utf-8") as file:
             time_estimate_context = file.read()
     except FileNotFoundError:
         # Fallback if file doesn't exist
@@ -70,7 +70,7 @@ def estimate_effort(feature_breakdown):
         print("\n⚠️ time_estimate_context.txt file not found. Proceeding without historical context.")
     
     try:
-        with open("C:/Users/aitha/Desktop/PreSales Automation/ai-powered-presales-automation-ai/cost_estimate_context.txt", "r", encoding="utf-8") as file:
+        with open("cost_estimate_context.txt", "r", encoding="utf-8") as file:
             cost_estimate_context = file.read()
     except FileNotFoundError:
         # Fallback if file doesn't exist
