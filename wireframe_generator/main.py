@@ -30,7 +30,6 @@ def generate_prompt(feature_breakdown):
         f"{json.dumps(feature_breakdown, indent=2)}"
     )
 
-
     return prompt
 
 def get_llm_response(prompt):
@@ -292,5 +291,5 @@ if __name__ == "__main__":
         ]
     }
     
-    # image_links = selenium_pipeline(feature_breakdown)
-    # print(image_links)
+    image_links = selenium_pipeline(feature_breakdown)
+    print(image_links)
