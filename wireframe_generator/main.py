@@ -16,6 +16,8 @@ from selenium.webdriver.support import expected_conditions as EC
 # Load API key from .env file
 load_dotenv()
 api_key = os.getenv("TOGETHER_API_KEY")
+email = os.getenv("EMAIL")
+password = os.getenv("PASSWORD")
 
 # Initialize Together client
 client = Together(api_key=api_key)
@@ -51,8 +53,7 @@ def get_llm_response(prompt):
 def selenium_pipeline(feature_breakdown):
     """Executes the Selenium automation pipeline."""
 
-    email = os.getenv("EMAIL")
-    password = os.getenv("PASSWORD")
+    
 
     service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service)

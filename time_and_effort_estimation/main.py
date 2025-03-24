@@ -59,7 +59,6 @@ def estimate_effort(feature_breakdown):
     
     # Initialize the Pydantic parser
     parser = PydanticOutputParser(pydantic_object=EffortEstimation)
-    
     # Load RAG context from file
     try:
         with open("time_estimate_context.txt", "r", encoding="utf-8") as file:
@@ -357,6 +356,10 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
                 backend_total_days += round((backend_days + backend_buffer) * 1.1,2)
                 testing_total_days += round(frontend_testing * 1.1, 2)  # Using frontend testing as requested
 
+                frontend_total_days = round(frontend_total_days,2)
+                backend_total_days = round(backend_total_days,2)
+                testing_total_days = round(testing_total_days,2)
+
                 # Original cost calculations (kept for compatibility)
                 frontend_cost = round(frontend_days * pricing_model["Frontend"] * 8,2)
                 backend_cost = round(backend_days * pricing_model["Backend"] * 8,2)
@@ -402,9 +405,9 @@ def generate_effort_excel(feature_breakdown, output_excel="effort_estimation.xls
 
     # Create new cost summary format as per the screenshot
     cost_summary_data = [
-        ["Frontend", frontend_total_days, pricing_model["Frontend"], round(frontend_total_days * 8 * pricing_model["Frontend"],2)],
-        ["Backend", backend_total_days, pricing_model["Backend"], round(backend_total_days * 8 * pricing_model["Backend"],2)],
-        ["Testing", testing_total_days, pricing_model["Testing"], round(testing_total_days * 8 * pricing_model["Testing"],2)]
+        ["Frontend", round(frontend_total_days,2), pricing_model["Frontend"], round(frontend_total_days * 8 * pricing_model["Frontend"],2)],
+        ["Backend", round(backend_total_days,2), pricing_model["Backend"], round(backend_total_days * 8 * pricing_model["Backend"],2)],
+        ["Testing", round(testing_total_days,2), pricing_model["Testing"], round(testing_total_days * 8 * pricing_model["Testing"],2)]
     ]
     
     # Calculate total cost
