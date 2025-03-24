@@ -10,6 +10,6 @@ temp.pdf
 
 effort_estimation.xlsx
 
-/_pycache_/
+/__pycache__/
 
 /*.pyc
