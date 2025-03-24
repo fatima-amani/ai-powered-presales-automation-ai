@@ -157,7 +157,7 @@ async def generate_user_persona(request: RequirementRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/generate-wireframe")
-async def generate_wireframe_endpoint(featureBreakdown: List[Module] = Body(..., embed=True)):
+async def generate_wireframe_endpoint(featureBreakdown: List[Module] = Body(..., embed=True), isMobileApp: bool = Body(...)):
     """
     Accepts a detailed feature breakdown and returns a wireframe generation result.
     """
@@ -165,9 +165,9 @@ async def generate_wireframe_endpoint(featureBreakdown: List[Module] = Body(...,
         raise HTTPException(status_code=400, detail="Feature breakdown is missing.")
 
     try:
-        # Convert to dict if generate_wireframe expects JSON-like dict
-        feature_breakdown_dict = [module.dict() for module in featureBreakdown]
-        wireframe_data = selenium_pipeline(feature_breakdown_dict)
+        # # Convert to dict if generate_wireframe expects JSON-like dict
+        # feature_breakdown_dict = [module.dict() for module in featureBreakdown]
+        wireframe_data = selenium_pipeline(featureBreakdown, isMobileApp)
 
         return {
             "message": "Wireframe generation successful",

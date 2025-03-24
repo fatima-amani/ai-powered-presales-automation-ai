@@ -49,7 +49,7 @@ def get_llm_response(prompt):
 
     return response.choices[0].message.content
 
-def selenium_pipeline(feature_breakdown):
+def selenium_pipeline(feature_breakdown, isMobileApp):
     """Executes the Selenium automation pipeline."""
 
     
