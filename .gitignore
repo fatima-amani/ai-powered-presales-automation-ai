@@ -13,3 +13,10 @@ effort_estimation.xlsx
 /__pycache__/
 
 /*.pyc
+effort_estimation.xlsx
+
+wireframe_generator/__pycache__/
+
+time_and_effort_estimation/__pycache__/
+
+business_analyst/__pycache__/

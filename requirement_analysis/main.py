@@ -2,17 +2,22 @@ import json
 import time
 import re
 from dotenv import load_dotenv
-from together import Together
+# from together import Together
+from openai import OpenAI
 import os
 import requests
 from .extract_from_doc import extract_text_from_doc, extract_text_from_pdf
 
 # Load API key from .env file
 load_dotenv()
-api_key = os.getenv("TOGETHER_API_KEY")
+# api_key = os.getenv("TOGETHER_API_KEY")
 
 # Initialize Together client
-client = Together(api_key=api_key)
+# client = Together(api_key=api_key)
+client = OpenAI(
+    base_url="https://models.inference.ai.azure.com",
+    api_key=os.environ["GITHUB_TOKEN"],
+)
 
 def extract_json_from_text(text):
     """Extracts and validates the JSON part from a given text output."""
@@ -80,8 +85,6 @@ def extract_requirements_llm(text, max_retries=3, delay=2):
         2. **Non-Functional Requirements**: List performance, security, and other system constraints.
         3. **Feature Breakdown**: Break down features into components, descriptions, and intelligently inferred subfeatures.
 
-        Each **feature and subfeature must include a clear description** explaining what it does and why it is needed.
-
         **Ensure the output strictly follows this JSON format:**  
 
         {{
@@ -108,8 +111,14 @@ def extract_requirements_llm(text, max_retries=3, delay=2):
 
         **Important:**  
         - Every **feature must contain the `subfeatures` key**.  
-        - If a feature has no subfeatures, set `"subfeatures": []`.  
-        - If a feature requires subfeatures, list at least **three relevant ones**.  
+        - If a feature has no explicitly mentioned subfeatures, **intelligently infer at least three subfeatures** by analyzing the feature's purpose and breaking it into smaller functional elements.  
+        - Subfeatures should capture granular tasks, interactions, or technical aspects relevant to the feature.  
+
+        **Example:**  
+        If the feature is **"User Authentication"**, possible subfeatures could be:  
+        1. "Password Reset" – Allows users to securely reset their password via email.  
+        2. "Multi-Factor Authentication" – Adds an extra security layer using OTP or an authenticator app.  
+        3. "Session Management" – Handles login session expiration and token refresh.  
 
         Input Text:
         {text}
@@ -117,15 +126,32 @@ def extract_requirements_llm(text, max_retries=3, delay=2):
         Provide the output in valid JSON format only, without any additional text.
         """
 
+
+        # response = client.chat.completions.create(
+        #     model="mistralai/Mistral-7B-Instruct-v0.3",
+        #     messages=[{"role": "user", "content": prompt}],
+        #     max_tokens=2500,
+        #     temperature=0.77,
+        #     top_p=0.7,
+        #     top_k=50,
+        #     repetition_penalty=1,
+        #     stop=["</s>"],
+        # )
+
         response = client.chat.completions.create(
-            model="mistralai/Mistral-7B-Instruct-v0.3",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=2500,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ],
+            model="gpt-4o",
+            max_tokens=4096,
             temperature=0.77,
             top_p=0.7,
-            top_k=50,
-            repetition_penalty=1,
-            stop=["</s>"],
+            frequency_penalty=0,
+            presence_penalty=0,
+            stop=["</s>"]
         )
 
         raw_output = response.choices[0].message.content
@@ -145,7 +171,7 @@ def extract_requirements_llm(text, max_retries=3, delay=2):
 
 if __name__ == "__main__":
     requirement_text = "Specify the key requirements for the system."
-    url = "https://res.cloudinary.com/depfpw7ym/image/upload/v1742037301/pre_sales_automation_dev/fog6ak0b56aaffwosyku.pdf"  # Replace with a valid Cloudinary URL
+    url = "https://res.cloudinary.com/depfpw7ym/image/upload/v1742658540/pre_sales_automation_dev/vmwarxl6olh62i7bvobr.pdf"  # Replace with a valid Cloudinary URL
     
     processed_requirements = extract_requirements(requirement_text, url)
     

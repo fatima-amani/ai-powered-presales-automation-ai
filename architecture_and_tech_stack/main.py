@@ -2,7 +2,8 @@ import os
 import json
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 from dotenv import load_dotenv
-from together import Together
+# from together import Together
+from openai import OpenAI
 import networkx as nx
 import json
 import re
@@ -12,7 +13,12 @@ load_dotenv()
 api_key = os.getenv("TOGETHER_API_KEY")
 
 # Initialize Together client
-client = Together(api_key=api_key)
+# client = Together(api_key=api_key)
+client = OpenAI(
+    base_url="https://models.inference.ai.azure.com",
+    api_key=os.environ["GITHUB_TOKEN"],
+)
+
 
 def get_tech_stack_recommendation(requirements_json,requirement_tech_stack):
     prompt = f"""
@@ -66,14 +72,19 @@ def get_tech_stack_recommendation(requirements_json,requirement_tech_stack):
 
     print(requirement_tech_stack)
     response = client.chat.completions.create(
-        model="mistralai/Mistral-7B-Instruct-v0.3",
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=1024,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        model="gpt-4o",
+        max_tokens=1500,
         temperature=0.77,
         top_p=0.7,
-        top_k=50,
-        repetition_penalty=1,
-        stop=["</s>"],
+        frequency_penalty=0,
+        presence_penalty=0,
+        stop=["</s>"]
     )
     
     raw_output = response.choices[0].message.content  # Extract text from response
@@ -136,13 +147,18 @@ def generate_architecture_diagram(requirements_json, tech_stack_json):
     """
 
     response = client.chat.completions.create(
-        model="mistralai/Mistral-7B-Instruct-v0.3",
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=2048,
-        temperature=0.7,
-        top_p=0.8,
-        top_k=50,
-        repetition_penalty=1.1,
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            }
+        ],
+        model="gpt-4o",
+        max_tokens=2500,
+        temperature=0.77,
+        top_p=0.7,
+        frequency_penalty=0,
+        presence_penalty=0,
         stop=["</s>"]
     )
 

@@ -62,7 +62,7 @@ def get_user_persona(requirement_json: str):
     response = client.chat.completions.create(
         model="mistralai/Mistral-7B-Instruct-v0.3",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=2000,
+        max_tokens=3000,
         temperature=0.7,
         top_p=0.7,
         top_k=50,
