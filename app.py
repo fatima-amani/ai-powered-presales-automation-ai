@@ -127,7 +127,7 @@ async def create_architecture_diagram(requirements: Requirements, tech_stack: Te
 async def estimate_effort(req: Requirements):
     try:
         output_excel = "effort_estimation.xlsx"
-        generate_effort_excel(req.dict(), output_excel)
+        generate_effort_excel(req, output_excel)
         
         with open(output_excel, "rb") as file:
             excel_data = file.read()
