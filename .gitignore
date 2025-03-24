@@ -9,3 +9,7 @@ time_and_effort_estimation/estimate_data/
 temp.pdf
 
 effort_estimation.xlsx
+
+/_pycache_/
+
+/*.pyc
