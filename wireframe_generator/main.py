@@ -29,7 +29,7 @@ def generate_prompt(feature_breakdown):
         "focusing **only on Website features**. "
         "Completely ignore any content related to Mobile or Apps, and exclude all mentions of mobile-specific tabs or features. "
         "The description must be strictly under 1000 characters, and avoid repeating similar sections:\n\n"
-        f"{json.dumps(feature_breakdown, indent=2)}"
+        f"{json.dumps(feature_breakdown, indent=2, default=str)}"
     )
 
     return prompt
