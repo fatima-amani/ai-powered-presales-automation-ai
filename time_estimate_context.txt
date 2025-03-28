@@ -1,0 +1,843 @@
+## Form > Speciality
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Form > Other details
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Form > Search Doctor within radius
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## List of available Doctors > View
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## List of available Doctors > List of Clinics Doctor is available at - time and price
+Metrics: Development Days: 1.5, DevOps Days: 0.3, Testing Days: 0.27, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## List of available Doctors > Confirm appointment with payment
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## List of available Doctors > Sync Smart watch
+Metrics: Development Days: 2.0, DevOps Days: 0.4, Testing Days: 0.36, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Context sensitive
+Metrics: Development Days: 2.0, DevOps Days: 0.4, Testing Days: 0.36, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Help > View Privacy Policy
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Help > View Terms & Conditions
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Help > View App Info
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Help > View Disclaimer
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Profile > Add/delete photo and text
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Profile > VIew and update profile
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Profile > Subscription status
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.2, DevOps Hours: 0.04, Testing Hours: 0.036
+
+## Logout
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## List all shared files
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## View shared file
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+Additional Info: 7.44
+Metrics: DevOps Days: 1.116, Testing Days: 5.004, DevOps Hours: 0.7506
+
+Additional Info: 81.84
+Metrics: DevOps Days: 12.276, Testing Days: 55.044, DevOps Hours: 8.2566
+
+## Architecture & Codebase setup
+Additional Info: 1.5
+Metrics: Development Days: 0.3, DevOps Days: 0.27, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## Splash Screens
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Login > Sign in with Google
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## Login > Login with email and password
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## Login > Login with phone number
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Forgot Password > Forgot password
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My Profile > View Profile Picture
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My Profile > Navigate to profile page
+Additional Info: 0.2
+Metrics: Development Days: 0.04, DevOps Days: 0.036, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## My appointments > Upcoming Appointments
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > Category wise appointments
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View list of appointments > List view
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View list of appointments > Calendar view
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## My appointments > On click of appointment > Bottom sheet
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > On click of appointment > Reschedule appointment
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## My appointments > On click of appointment > Switch to online consultation
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > Patient Information > Tabs
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Preclinicals > Preclinicals Metrics
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## My appointments > View Preclinicals > Historical Data
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Preclinicals > Smart watch Sync
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Prescription > View current prescriptions
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Prescription > View past prescriptions
+Additional Info: 1.5
+Metrics: Development Days: 0.3, DevOps Days: 0.27, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Prescription > Bottom sheet for selecting a previous prescription
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Procedure > Note taking on procedures
+Additional Info: 2.0
+Metrics: Development Days: 0.4, DevOps Days: 0.36, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## My appointments > View Procedure > Notify Receptionist
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Reports > List of reports
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Reports > View report
+Additional Info: 1.5
+Metrics: Development Days: 0.3, DevOps Days: 0.27, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Patient Profile > Patient details
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Patient Profile > Patient demographics
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Patient Profile > Allergies
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Patient Profile > Medical History
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Patient Profile > Vaccinations
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Patient Profile > Previous Reports
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > View Patient Profile > Clinics Visited
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > Start Online Consultation > Video call integration
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My appointments > Send Message
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## About the clinic > clinic owner details
+Additional Info: 1.5
+Metrics: Development Days: 0.3, DevOps Days: 0.27, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## About the clinic > Call
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## About the clinic > Email
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## About the clinic > Address with on-click Maps
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Critical patient
+Description: 0.5
+Additional Info: 0.1
+Metrics: Development Days: 0.09, DevOps Days: 0.5, Testing Days: 0.1, Development Hours: 0.09
+
+## VIP patient
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Sort and Search
+Description: 1
+Additional Info: 0.2
+Metrics: Development Days: 0.18, DevOps Days: 0.5, Testing Days: 0.1, Development Hours: 0.09
+
+## Chat > Chat History
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Chat > Specific Chat
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Chat > Delete Chat
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Patients Listing > Patient listing category wise
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Patients Listing > Filter datewise
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Patients Listing > Bottom sheet for clinics
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Patient Details > View health conditions
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Patient Details > Mediline - Upcoming appointments
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Patient Details > View Mediline of Specific Patient
+Additional Info: 2.0
+Metrics: Development Days: 0.4, DevOps Days: 0.36, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## Patient Details > Prescriptions
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## Patient Details > Reports
+Additional Info: 1.5
+Metrics: Development Days: 0.3, DevOps Days: 0.27, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Patient Details > Patient Profile
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Mediline > Share Mediline with other doctors within clinic
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## Mediline > Share Mediline with Jatya verified Doctor
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Upload/Download reports > View all reports
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Upload/Download reports > Download Reports
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Upload/Download reports > View particular report
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Upload/Download reports > Archive Report
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## Upload/Download prescriptions > View all prescriptions
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Upload/Download prescriptions > Download Prescriptions
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Medicine pack > Show list
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Antibiotics > Show list
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Medicine pack actions > -medicine name
+Additional Info: 1.5
+Metrics: Development Days: 0.3, DevOps Days: 0.27, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Medicine pack actions > -brand name
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Medicine pack actions > -Before / after food
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Medicine pack actions > -time
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Medicine pack actions > -no. of days/weeks/month
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Medicine pack actions > -quantity
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Medicine pack actions > -dose
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Medicine pack actions > -save
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Medicine pack actions > -delete
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Share Medicine pack
+Description: 1
+Additional Info: 0.2
+Metrics: Development Days: 0.18, DevOps Days: 0.5, Testing Days: 0.1, Development Hours: 0.09
+
+## Same flow as in the receptionist application
+Description: 1
+Additional Info: 0.2
+Metrics: Development Days: 0.18, DevOps Days: 0.5, Testing Days: 0.1, Development Hours: 0.09
+
+## Appointment Form > Patient Search
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Appointment Form > Date and Time slot
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Appointment Form > Calendar view of booking
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Video call
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## Leave a message
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Files > Will be defined as the project proceeds
+Description: 1
+Additional Info: 0.2
+Metrics: Development Days: 0.18, DevOps Days: 1.0, Testing Days: 0.2, Development Hours: 0.18
+
+## Mediline
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## My Profile > Upload profile picture
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My Profile > Edit details
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My Profile > Clinics the Doctor is available at
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My Profile > Manage availability
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My Profile > Manage time slots
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## My Profile > View Privacy Policy
+Additional Info: 1.0
+Metrics: Development Days: 0.2, DevOps Days: 0.18, Testing Days: 1.0, Development Hours: 0.2, DevOps Hours: 0.18
+
+## My Profile > View Terms & Conditions
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## My Profile > View App Info
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## My Profile > View Disclaimer
+Additional Info: 0.0
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Help > FAQ
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Help > Contact Us
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0
+
+## Sign out
+Description: 0.5
+Additional Info: 0.1
+Metrics: Development Days: 0.09, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0
+
+## Context sensitive notifications > List of notifications
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+## Context sensitive notifications > Particular notification detail(payment remainder and upcoming appointment
+Additional Info: 0.5
+Metrics: Development Days: 0.1, DevOps Days: 0.09, Testing Days: 0.5, Development Hours: 0.1, DevOps Hours: 0.09
+
+Description: UAT & Bug Fixes
+Additional Info: 14.1726
+Metrics: Development Days: 1.0746, DevOps Days: 5.16, Testing Days: 0.774
+
+Description: Total Man Days
+Additional Info: 80.9726
+Metrics: Development Days: 11.8206, DevOps Days: 56.76, Testing Days: 8.514, Development Hours: 18.968064
+
+## Architecture & Codebase setup
+Additional Info: 1.5
+Metrics: DevOps Days: 0.3, Testing Days: 0.27
+
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18
+
+## Login > Sign in with Google
+Metrics: DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Login > Login with email and password
+Metrics: DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Login > Login with phone number
+Metrics: DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Forgot Password > Forgot password
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Logout
+Metrics: DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Navigate to Doctors
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Navigate to Tasks Pending
+Metrics: DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Navigate to the payment screen
+Metrics: DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## About the Clinic
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Clinic Owner Info
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Clinic Consultation Hours
+Metrics: DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patient Demographic Form
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Add Reports > Report type and report picture
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## QR code > QR code for patient to download and register into the Patient app
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Book appointment CTA
+Metrics: DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Patient Profile > View
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patient Profile > View Previous Bookings
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patient Search
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Book appointment > Form
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Book appointment > Select Doctor
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Book appointment > In Person / Online consultation
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Book appointment > Collect Payment
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 2.0, DevOps Hours: 0.4, Testing Hours: 0.36
+
+## Book appointment > Generate Receipt - QR Code
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Pre-clinical Examination > Form
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 1.5, DevOps Hours: 0.3, Testing Hours: 0.27
+
+## View tasks sorted by task type
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Today's appointments > Search Today's appointments
+Additional Info: 1.5
+Metrics: DevOps Days: 0.3, Testing Days: 0.27, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Select different date > For previous dates
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Select different date > For upcoming dates
+Metrics: DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Search for events in the calendar
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Option to reschedule appointment > Show Available/Booked slot
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Option to cancel appointment > Navigate to the confirmation screen for canceling the appointment.
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patients Listing > Show Patient list
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patients Listing > Specific Patient
+Additional Info: 1.5
+Metrics: DevOps Days: 0.3, Testing Days: 0.27, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patients Listing > Filter
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patients Listing > Bottom sheet
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Patient Details > View Profile - Demographics and Previous reports > CRUD
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patient Details > Message Patient
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patient Details > View health conditions
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Patient Details > Past Appointments History
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## View all reports
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Download Reports
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.2, DevOps Hours: 0.04, Testing Hours: 0.036
+
+## View particular report
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## View all prescriptions
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Download Prescriptions
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## View particular prescription
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## My Profile > Profile Info
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## My Profile > Change Password
+Additional Info: 1.0
+Metrics: DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## My Profile > Terms & Agreement
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## My Profile > Clinic Info
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## My Profile > Sign out
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Notifications > List of notifications
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Notifications > Particular notification detail
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Notifications > Context sensitive
+Additional Info: 2.0
+Metrics: DevOps Days: 0.4, Testing Days: 0.36, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+Additional Info: 0.5
+Metrics: DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## General
+Description: Architecture & Codebase setup
+Metrics: Development Days: 1.5, Testing Days: 0.27, Development Hours: 1.0, Testing Hours: 0.18
+
+## Splash Screens
+Additional Info: 1.0
+Metrics: DevOps Days: 0.18, Testing Days: 0.0, DevOps Hours: 0.0
+
+## Authentication > Login > Login - Role based access
+Metrics: Development Days: 1.0, Testing Days: 0.18, Development Hours: 0.5, Testing Hours: 0.09
+
+## Authentication > Forgot Password > Forgot password
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.5, Testing Hours: 0.09
+
+## Pre-clinical Examination > Form
+Additional Info: 1.5
+Metrics: DevOps Days: 0.225, Testing Days: 1.0, DevOps Hours: 0.18
+
+## Reports > Recent Reports > View all reports
+Metrics: Development Days: 1.0, Testing Days: 0.18, Development Hours: 0.5, Testing Hours: 0.09
+
+## Reports > Recent Reports > Download Reports
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.5, Testing Hours: 0.09
+
+## Reports > Recent Reports > View particular report
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.5, Testing Hours: 0.09
+
+## Reports > Recent Reports > Archive Report
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.2, Testing Hours: 0.036
+
+## Reports > Recent Reports > Delete Report
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.2, Testing Hours: 0.036
+
+## Reports > Recent Reports > Edit Title
+Metrics: Development Days: 0.2, Testing Days: 0.036, Development Hours: 0.2, Testing Hours: 0.036
+
+## My Profile > My Profile > Profile Info
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.5, Testing Hours: 0.09
+
+## My Profile > My Profile > Change Password
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.5, Testing Hours: 0.09
+
+## My Profile > My Profile > Terms & Agreement
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.5, Testing Hours: 0.09
+
+## My Profile > My Profile > Clinic Info
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.5, Testing Hours: 0.09
+
+## My Profile > My Profile > Sign out
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.0, Testing Hours: 0.0
+
+## Notifications > Notifications > List of notifications
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.5, Testing Hours: 0.09
+
+## Notifications > Notifications > Particular notification detail
+Metrics: Development Days: 0.5, Testing Days: 0.09, Development Hours: 0.5, Testing Hours: 0.09
+
+## Notifications > Notifications > Context sensitive
+Metrics: Development Days: 1.0, Testing Days: 0.18, Development Hours: 1.0, Testing Hours: 0.18
+
+## UAT & Bug Fixes
+Metrics: Development Days: 1.674, Testing Days: 0.2511, Development Hours: 1.092, Testing Hours: 0.1638
+
+## Total Man Days
+Metrics: Development Days: 16.74, Testing Days: 2.7621, Development Hours: 12.012, Testing Hours: 3.997908
+
+## Architecture & Codebase setup
+Metrics: Development Days: 1.5, DevOps Days: 0.3, Testing Days: 0.36, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.24
+
+## Clinical Staff > Individual staff > Reset Password of user
+Description: Email activation link
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.24
+
+## Medicine Packs > List of Medicine Packs
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.12, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Medicine Packs > Add New Medicine Pack
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.12, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Archived Patients > List of Archived Patients > Archived Patients from Doctors
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Archived Patients > Search
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.24
+
+## Archived Patients > Purge Patient record
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.12, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Archived Patients > Download Report
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.12, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Archived Patients > Unarchive Patient
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.12, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Custom Fields Setup > Report Types > CRUD
+Description: Drag and Drop
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Custom Fields Setup > Clinic Speciality > View
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Custom Fields Setup > Clinic Speciality > Add one or more
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Custom Fields Setup > Payment Type
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.24
+
+## Custom Fields Setup > Preclinical Examination
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.24
+
+## Custom Fields Setup > Patient Allergies
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.12, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.24
+
+## Custom Fields Setup > Other
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.12, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Manage Payment
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Onboard Clinic
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.24, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## UAT & Bug Fixes
+Metrics: Development Days: 2.58, DevOps Days: 0.516, Testing Days: 1.92, Development Hours: 0.384
+
+## Architecture & Codebase setup
+Metrics: Development Days: 1.5, DevOps Days: 0.3, Testing Days: 0.27, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Onboarding of a Clinic > Add Clinic Owner Details
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Onboarding of a Clinic > Add Duty Doctors
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Onboarding of a Clinic > Add Payment Gateway setup
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Onboarding of a Clinic > Add Other Staff
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Clinics > List of all clinics
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Clinics > Clinic details
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Manage Subscriptions > Temporarily Suspend Clinic
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.09
+
+## Manage Subscriptions > Permanently Suspend Clinic
+Metrics: Development Days: 0.0, DevOps Days: 0.0, Testing Days: 0.0, Development Hours: 0.0, DevOps Hours: 0.0, Testing Hours: 0.0
+
+## Manage Subscriptions > Upgrade Subscription
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.09, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Manage Subscriptions > Subscription plans
+Metrics: Development Days: 1.5, DevOps Days: 0.3, Testing Days: 0.27, Development Hours: 1.5, DevOps Hours: 0.3, Testing Hours: 0.27
+
+## Locations > Location view of all clinics
+Metrics: Development Days: 2.0, DevOps Days: 0.4, Testing Days: 0.36, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Locations > View details of a particular clinic
+Metrics: Development Days: 1.0, DevOps Days: 0.2, Testing Days: 0.18, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Locations > Search
+Metrics: Development Days: 1.5, DevOps Days: 0.3, Testing Days: 0.27, Development Hours: 1.0, DevOps Hours: 0.2, Testing Hours: 0.18
+
+## Medicine Packs > List of Medicine Packs
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.12, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
+
+## Medicine Packs > Add New Medicine Pack
+Metrics: Development Days: 0.5, DevOps Days: 0.1, Testing Days: 0.12, Development Hours: 0.5, DevOps Hours: 0.1, Testing Hours: 0.12
